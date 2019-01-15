@@ -3,8 +3,8 @@ package rpcx
 import (
 	"context"
 	"log"
-	"star_cloud/edge/models"
-	"star_cloud/edge/transport/interfaces"
+	"star-edge-cloud/edge/models"
+	"star-edge-cloud/edge/transport/interfaces"
 
 	"github.com/smallnest/rpcx/server"
 )

@@ -1,6 +1,6 @@
 package interfaces
 
-import "star_cloud/edge/transport/interfaces"
+import "star-edge-cloud/edge/transport/interfaces"
 
 // IAlgorithm --算法
 type IAlgorithm interface {

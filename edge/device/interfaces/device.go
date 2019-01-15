@@ -1,6 +1,6 @@
 package interfaces
 
-import "star_cloud/edge/transport/interfaces"
+import "star-edge-cloud/edge/transport/interfaces"
 
 // IDevice -- 设备服务接口
 type IDevice interface {

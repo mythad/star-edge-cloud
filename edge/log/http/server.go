@@ -6,8 +6,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"star_cloud/edge/log/implemention"
-	"star_cloud/edge/models"
+	"star-edge-cloud/edge/log/implemention"
+	"star-edge-cloud/edge/models"
 	"strconv"
 	"time"
 

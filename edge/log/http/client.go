@@ -2,8 +2,8 @@ package http
 
 import (
 	"encoding/json"
-	"star_cloud/edge/models"
-	"star_cloud/edge/transport/http"
+	"star-edge-cloud/edge/models"
+	"star-edge-cloud/edge/transport/http"
 	"time"
 )
 

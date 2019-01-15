@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"star_cloud/edge/core/config"
-	"star_cloud/edge/core/device"
-	"star_cloud/edge/core/service"
+	"star-edge-cloud/edge/core/config"
+	"star-edge-cloud/edge/core/device"
+	"star-edge-cloud/edge/core/service"
 
 	"github.com/joho/godotenv"
 )

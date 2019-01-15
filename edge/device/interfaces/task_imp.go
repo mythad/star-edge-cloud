@@ -3,7 +3,7 @@ package interfaces
 import (
 	"fmt"
 	"os"
-	"star_cloud/edge/transport/interfaces"
+	"star-edge-cloud/edge/transport/interfaces"
 
 	"github.com/takama/daemon"
 )

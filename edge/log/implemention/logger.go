@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"star_cloud/edge/models"
+	"star-edge-cloud/edge/models"
 	"time"
 
 	// 导入驱动，golang要求必须注释一下

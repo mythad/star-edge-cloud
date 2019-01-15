@@ -1,9 +1,9 @@
 package devlog
 
 import (
-	"star_cloud/edge/log/http"
-	"star_cloud/edge/models"
-	"star_cloud/edge/utils/common"
+	"star-edge-cloud/edge/log/http"
+	"star-edge-cloud/edge/models"
+	"star-edge-cloud/edge/utils/common"
 	"time"
 )
 

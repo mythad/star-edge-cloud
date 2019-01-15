@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"log"
-	"star_cloud/edge/models"
+	"star-edge-cloud/edge/models"
 	"strings"
 	"time"
 

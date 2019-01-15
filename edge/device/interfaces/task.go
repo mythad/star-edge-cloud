@@ -1,7 +1,7 @@
 package interfaces
 
 import (
-	"star_cloud/edge/transport/interfaces"
+	"star-edge-cloud/edge/transport/interfaces"
 )
 
 // Task - 工作任务

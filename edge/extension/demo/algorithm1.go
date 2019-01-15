@@ -3,12 +3,12 @@ package demo
 import (
 	"container/list"
 	"os"
-	"star_cloud/edge/extension/extlog"
-	"star_cloud/edge/extension/interfaces"
-	"star_cloud/edge/models"
-	"star_cloud/edge/transport/http"
-	tin "star_cloud/edge/transport/interfaces"
-	"star_cloud/edge/utils/common"
+	"star-edge-cloud/edge/extension/extlog"
+	"star-edge-cloud/edge/extension/interfaces"
+	"star-edge-cloud/edge/models"
+	"star-edge-cloud/edge/transport/http"
+	tin "star-edge-cloud/edge/transport/interfaces"
+	"star-edge-cloud/edge/utils/common"
 )
 
 // var realtimeDataList *list.List

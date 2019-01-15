@@ -2,12 +2,12 @@ package main
 
 import (
 	"os"
-	hg "star_cloud/edge/log/http"
-	"star_cloud/edge/models"
-	"star_cloud/edge/store/implemetion/kv"
-	"star_cloud/edge/store/interfaces"
-	"star_cloud/edge/transport/http"
-	"star_cloud/edge/utils/common"
+	hg "star-edge-cloud/edge/log/http"
+	"star-edge-cloud/edge/models"
+	"star-edge-cloud/edge/store/implemetion/kv"
+	"star-edge-cloud/edge/store/interfaces"
+	"star-edge-cloud/edge/transport/http"
+	"star-edge-cloud/edge/utils/common"
 	"time"
 
 	"github.com/takama/daemon"

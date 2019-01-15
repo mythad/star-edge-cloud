@@ -1,6 +1,6 @@
 package interfaces
 
-import "star_cloud/edge/models"
+import "star-edge-cloud/edge/models"
 
 // IRequestHandler 接收到数据，调用回调方法
 type IRequestHandler interface {

@@ -7,6 +7,9 @@
 
 因为考虑到性能问题，初步计划采用Go(edge端，version1.10+)和java(cloud端，version1.8+)语言编写。
 
+[github源码地址](https://github.com/mythad/star-edge-cloud)
+QQ交流群：582945208
+
 ## 软件架构
 
 希望架构做到以下几点：

@@ -2,10 +2,10 @@ package demo
 
 import (
 	"container/list"
-	"star_cloud/edge/device/interfaces"
-	"star_cloud/edge/models"
-	tin "star_cloud/edge/transport/interfaces"
-	"star_cloud/edge/utils/common"
+	"star-edge-cloud/edge/device/interfaces"
+	"star-edge-cloud/edge/models"
+	tin "star-edge-cloud/edge/transport/interfaces"
+	"star-edge-cloud/edge/utils/common"
 	"time"
 )
 

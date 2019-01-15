@@ -2,7 +2,7 @@ package http
 
 import (
 	"encoding/json"
-	"star_cloud/edge/models"
+	"star-edge-cloud/edge/models"
 )
 
 // RestClient -

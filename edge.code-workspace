@@ -26,6 +26,9 @@
 		},
 		{
 			"path": "edge/utils"
+		},
+		{
+			"path": "edge/vendor"
 		}
 	]
 }

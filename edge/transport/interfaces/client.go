@@ -1,6 +1,6 @@
 package interfaces
 
-import "star_cloud/edge/models"
+import "star-edge-cloud/edge/models"
 
 // IClient -- edge和cloud之间通信的客户端接口
 type IClient interface {

@@ -2,7 +2,7 @@ package extension
 
 import (
 	"fmt"
-	"star_cloud/edge/utils/common"
+	"star-edge-cloud/edge/utils/common"
 	"strings"
 )
 

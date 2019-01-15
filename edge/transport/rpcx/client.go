@@ -3,7 +3,7 @@ package rpcx
 import (
 	"context"
 	"log"
-	"star_cloud/edge/models"
+	"star-edge-cloud/edge/models"
 	"strings"
 
 	"github.com/smallnest/rpcx/client"

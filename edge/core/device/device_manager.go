@@ -9,9 +9,9 @@ import (
 	"log"
 	"mime/multipart"
 	"os"
-	"star_cloud/edge/core/config"
-	"star_cloud/edge/models"
-	"star_cloud/edge/utils/common"
+	"star-edge-cloud/edge/core/config"
+	"star-edge-cloud/edge/models"
+	"star-edge-cloud/edge/utils/common"
 	"strconv"
 	"strings"
 

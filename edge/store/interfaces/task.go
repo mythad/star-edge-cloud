@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"star_cloud/edge/models"
-	"star_cloud/edge/transport/interfaces"
+	"star-edge-cloud/edge/models"
+	"star-edge-cloud/edge/transport/interfaces"
 
 	"github.com/takama/daemon"
 )
