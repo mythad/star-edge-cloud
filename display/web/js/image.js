@@ -1,3 +1,5 @@
+var listimage_url = 'http://localhost:22000/api/caas/listimage';
+
 String.prototype.format = function () {
     var values = arguments;
     return this.replace(/\{(\d+)\}/g, function (match, index) {
@@ -13,7 +15,7 @@ var tbrow = '<tr><td>{0}</td><td>{1}</td><td>{2}</td><td><i title="删除" class
 
 $(document).ready(function () {
     $.ajax({
-        url: 'http://localhost:22000/api/caas/listimage',
+        url: listimage_url,
         type: 'POST',
         cache: false,
         processData: false,

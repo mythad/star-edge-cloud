@@ -1,7 +1,9 @@
+var count_url = "http://192.168.3.78:22000/api/transport/count";
+var log_url = "http://192.168.3.78:22000/api/log/load";
 var charte;
 $(document).ready(function () {
     // 基于准备好的dom，初始化echarts图表
-    charte = echarts.init(document.getElementById('pied'));
+    charte = echarts.init(document.getElementById('piee'));
     optione = {
         title: {
             text: '设备服务状态',
@@ -53,7 +55,7 @@ $(document).ready(function () {
         ]
     };
     // 为echarts对象加载数据 
-    charte.setOption(optiond);
+    charte.setOption(optione);
 
     loadData();
     setInterval("loadData()", 10000);
@@ -70,7 +72,7 @@ function loadLog() {
     };
     $.ajax({
         type: "POST",
-        url: "/api/log/load",
+        url: log_url,
         traditional: true,
         // contentType: "application/json",
         // data: JSON.stringify(data),
@@ -90,8 +92,10 @@ function loadLog() {
 function count() {
     $.ajax({
         type: "POST",
-        url: "http://localhost:22000/api/transport/count",
-        traditional: true,
+        url: count_url,
+        cache: false,
+        processData: false,
+        contentType: false,
         success: function (msg) {
             $("#rdcount").html(msg);
         }

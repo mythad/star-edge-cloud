@@ -10,6 +10,7 @@ import com.starcloud.model.RealtimeData;
 import com.starcloud.model.Result;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -60,6 +61,7 @@ public class StoreController {
 
     }
 
+    @CrossOrigin(origins = "*", maxAge = 3600)
     @RequestMapping(value = "/api/transport/count")
     public String count() {
         long r = 0L;

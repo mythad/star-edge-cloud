@@ -70,7 +70,7 @@ public class DockerHelper {
     }
 
     public void CreateNetwork() {
-        dockerClient.createNetworkCmd().exec();
+        dockerClient.createNetworkCmd().withName("staredgecloud").withDriver("overlay").exec();
     }
 
     public void RemoveNetwork(String nid) {
@@ -87,7 +87,7 @@ public class DockerHelper {
     }
 
     public void CreateVolumn() {
-        dockerClient.createVolumeCmd().exec();
+        dockerClient.createVolumeCmd().withName("myNamedVolume").exec();
     }
 
     public void RemoveVolumn(String vid) {
