@@ -143,6 +143,7 @@ sudo chmod +x edge.sh
 sudo ./core
 ```
 3. 访问：[http://localhost:21000/html/index.html](http://localhost:21000/html/index.html)
+![edge](./images/edge.png)
 4. 运行log服务
 5. 运行store服务
 6. 添加设备设备，选择compile目录下编译好的文件
@@ -207,7 +208,7 @@ cp -r */web */webapps/
 ```
 12. 访问及验证：
 [http://localhost:8080/web/index.html]http://localhost:8080/web/index.html
-
+![cloud](./images/cloud.png)
 > 注意：
 > 1.目前仅仅是演示版本，尚有很多很多功能没有完成，部分功能还有Bug，但这只是开始   
 > 2.查看sqlite数据，可以使用SQLiteStudio
