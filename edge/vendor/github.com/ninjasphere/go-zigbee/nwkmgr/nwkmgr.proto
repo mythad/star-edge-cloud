@@ -1,0 +1,684 @@
+//----------------------------------------------------------------------------
+//  Filename:       nwkmgr.proto
+//  Revised:        $Date$
+//  Revision:       $Revision$
+//
+//  Description:    TI ZStack Network Manager Server Protocol Buffers Definition File
+//
+//
+//  Copyright 2013 Texas Instruments Incorporated. All rights reserved.
+//
+//  IMPORTANT: Your use of this Software is limited to those specific rights
+//  granted under the terms of a software license agreement between the user
+//  who downloaded the software, his/her employer (which must be your employer)
+//  and Texas Instruments Incorporated (the "License").  You may not use this
+//  Software unless you agree to abide by the terms of the License. The License
+//  limits your use, and you acknowledge, that the Software may not be modified,
+//  copied or distributed unless used solely and exclusively in conjunction with 
+//  a Texas Instruments radio frequency device, which is integrated into 
+//  your product.  Other than for the foregoing purpose, you may not use, 
+//  reproduce, copy, prepare derivative works of, modify, distribute, perform, 
+//  display or sell this Software and/or its documentation for any purpose.
+//  
+//
+//  YOU FURTHER ACKNOWLEDGE AND AGREE THAT THE SOFTWARE AND DOCUMENTATION ARE
+//  PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+//  INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF MERCHANTABILITY, TITLE,
+//  NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT SHALL
+//  TEXAS INSTRUMENTS OR ITS LICENSORS BE LIABLE OR OBLIGATED UNDER CONTRACT,
+//  NEGLIGENCE, STRICT LIABILITY, CONTRIBUTION, BREACH OF WARRANTY, OR OTHER
+//  LEGAL EQUITABLE THEORY ANY DIRECT OR INDIRECT DAMAGES OR EXPENSES
+//  INCLUDING BUT NOT LIMITED TO ANY INCIDENTAL, SPECIAL, INDIRECT, PUNITIVE
+//  OR CONSEQUENTIAL DAMAGES, LOST PROFITS OR LOST DATA, COST OF PROCUREMENT
+//  OF SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
+//  (INCLUDING BUT NOT LIMITED TO ANY DEFENSE THEREOF), OR OTHER SIMILAR COSTS.
+//
+//  Should you have any questions regarding your right to use this Software,
+//  contact Texas Instruments Incorporated at www.TI.com.
+//----------------------------------------------------------------------------
+
+
+//-----------------------------------------
+// Constants and definitions
+//-----------------------------------------
+
+// MT System ID for Network Manager Protobuf sub-system ID
+enum zStackNwkMgrSysId_t
+{
+  RPC_SYS_PB_NWK_MGR = 18;
+}
+
+// Command IDs - each of these are associated with Request, Responses, Indications, and Confirm messages
+enum nwkMgrCmdId_t 
+{
+  ZIGBEE_GENERIC_CNF = 0;
+
+  ZIGBEE_GENERIC_RSP_IND = 1;
+
+  NWK_ZIGBEE_SYSTEM_RESET_REQ = 2;
+  NWK_ZIGBEE_SYSTEM_RESET_CNF = 3;
+    
+  NWK_ZIGBEE_SYSTEM_SELF_SHUTDOWN_REQ = 4;
+  
+  NWK_SET_ZIGBEE_POWER_MODE_REQ = 5;
+  NWK_SET_ZIGBEE_POWER_MODE_CNF = 6;
+
+  NWK_GET_LOCAL_DEVICE_INFO_REQ = 7;
+  NWK_GET_LOCAL_DEVICE_INFO_CNF = 8;
+
+  NWK_ZIGBEE_NWK_READY_IND = 9;
+
+  NWK_ZIGBEE_NWK_INFO_REQ = 10;
+  NWK_ZIGBEE_NWK_INFO_CNF = 11;
+
+  NWK_SET_PERMIT_JOIN_REQ = 12;
+
+  NWK_MANAGE_PERIODIC_MTO_ROUTE_REQ = 13;
+  
+  NWK_GET_NEIGHBOR_TABLE_REQ = 14;
+  NWK_GET_NEIGHBOR_TABLE_RSP_IND = 15;
+
+  NWK_GET_ROUTING_TABLE_REQ = 16;
+  NWK_GET_ROUTING_TABLE_RSP_IND = 17;
+  
+  NWK_CHANGE_NWK_KEY_REQ = 18;
+  
+  NWK_GET_NWK_KEY_REQ = 19;
+  NWK_GET_NWK_KEY_CNF = 20;
+
+  NWK_ZIGBEE_DEVICE_IND = 21;
+
+  NWK_GET_DEVICE_LIST_REQ = 22;
+  NWK_GET_DEVICE_LIST_CNF = 23;
+
+  NWK_DEVICE_LIST_MAINTENANCE_REQ = 24;
+
+  NWK_REMOVE_DEVICE_REQ = 25;
+
+  NWK_SET_BINDING_ENTRY_REQ = 26;
+  NWK_SET_BINDING_ENTRY_RSP_IND = 27;
+}
+
+enum nwkResetMode_t
+{
+  SOFT_RESET = 0;                  // Soft reset / maintain core stack base
+  HARD_RESET = 1;                  // Hard reset / reset to factory new
+}
+
+enum nwkPowerMode_t
+{
+  SLEEP = 0;                       // Sleep / low power mode
+  WAKEUP = 1;                      // Wakeup / active mode
+}
+
+enum nwkNetworkStatus_t
+{
+  NWK_DOWN = 0;                    // Network down
+  NWK_UP = 1;                      // Network up
+}
+
+enum nwkPermitJoinType_t
+{
+  PERMIT_LOCAL = 0;                // Sent to the local device only
+  PERMIT_NETWORK = 1;              // Network wide (including this device)
+  PERMIT_ALL = 2;                  // Sent to all devices but this device
+}
+
+enum nwkMtoRouteMode_t
+{
+  MTO_ROUTE_START = 0;             // Start periodic MTO route request maintenance
+  MTO_ROUTE_STOP = 1;              // Stop periodic MTO route request maintenance
+}
+
+enum nwkDeviceStatus_t
+{
+  DEVICE_OFF_LINE = 0;             // Device is off-line (non-responsive to service discovery)
+  DEVICE_ON_LINE = 1;              // Status good
+  DEVICE_REMOVED = 2;              // Device has been removed
+  DEVICE_NA = 255;                 // Not Applicable (this value is returned when gateway device)
+}
+  
+enum nwkAddressType_t
+{
+  UNICAST = 0;                     // Unicast/Single device (using 64 bit IEEE Address)
+  GROUPCAST = 1;                   // Groupcast (using 16 bit group ID)
+  BROADCAST = 2;                   // Broadcast (using 16 bit broacast address)
+  SELF = 3;                        // Self addressing - referring to the gateway device itself. No address is specified
+}
+
+enum nwkStatus_t
+{
+  STATUS_SUCCESS = 0;
+  STATUS_FAILURE = 1;
+  STATUS_BUSY = 2;      // state machine busy, resources unavailable... 
+  STATUS_INVALID_PARAMETER = 3;
+  STATUS_TIMEOUT = 4;
+}
+
+enum nwkLeaveMode_t
+{
+  LEAVE = 0;                       // Just Leave
+  LEAVE_REJOIN = 1;                // Leave and rejoin
+}
+
+enum nwkBindingMode_t
+{
+  BIND = 0;                        
+  UNBIND = 1;
+}
+
+enum nwkDeviceType_t
+{
+  ZIGBEE_COORDINATOR = 0;    
+  ZIGBEE_ROUTER = 1;
+  ZIGBEE_END_DEVICE = 2;
+  UNKNOWN_DEVICE_TYPE = 3;
+}
+
+enum nwkRxOnWhenIdle_t
+{
+  RX_IS_OFF = 0;
+  RX_IS_ON = 1;
+  UNKNOWN_RX_STATE = 2;
+}
+
+enum nwkRelationship_t
+{
+  PARENT = 0;
+  CHILD = 1;
+  SIBLING = 2;
+  NONE_OF_THE_ABOVE = 3;
+  PREVIOUS_CHILD = 4;
+}
+
+enum nwkPermitJoiningStatus_t
+{
+  NOT_ACCEPTING = 0;
+  ACCEPTS = 1;
+  UNKNOWN_STATUS = 2;
+}
+
+enum nwkRouteStatus_t
+{
+  ROUTE_ACTIVE = 0;
+  ROUTE_DISCOVERY_UNDERWAY = 1;
+  ROUTE_DISCOVERY_FAILED = 2;
+  REOUT_INACTIVE = 3;
+}
+
+//----------------------------------------------------------------------------------------------
+// Structures - submessages, these aren't sent as messages but are included within other messages
+//----------------------------------------------------------------------------------------------
+
+message nwkAddressStruct_t
+{
+  required nwkAddressType_t addressType = 1;  // Address Mode
+  optional fixed64 ieeeAddr = 2;              // Device's unique 64 bit IEEE Address (addressType == UNICAST)
+  optional uint32 groupAddr = 3;              // (uint16) group address (addrMode == GROUPCAST)
+  optional uint32 broadcastAddr = 4;          // (uint16) broadcast address (addrMode == BROADCAST)
+  optional uint32 endpointId = 5;             // (uint8) Endpoint ID. If omitted, it means referring to all endpoints.
+}
+
+message nwkSimpleDescriptor_t
+{
+  required uint32 endpointId = 1;         // (uint8) endpoint
+  required uint32 profileId = 2;          // (uint16) applications profile ID
+  required uint32 deviceId = 3;           // (uint16) device ID
+  required uint32 deviceVer = 4;          // (uint16) device version
+  repeated uint32 inputClusters = 5;      // Array of (uint16) input clusters
+  repeated uint32 outputClusters = 6;     // Array of (uint16) output clusters
+}
+
+message nwkBindRec_t
+{
+  required nwkAddressStruct_t srcAddr = 1;   // Source Address
+  required uint32 clusterId = 2;     // (uint16) Cluster ID
+  required nwkAddressStruct_t dstAddr = 3;   // destination address - target of the binding
+}
+
+message nwkDeviceInfo_t
+{
+  required uint32 networkAddress = 1;                 // (uint16) device short address
+  required fixed64 ieeeAddress = 2;                   // device extended address
+  optional fixed64 parentIeeeAddress = 3;             // IEEE address of the parent device, if available
+  required uint32 manufacturerId = 4;                 // (uint16) manufacturer ID
+  repeated nwkSimpleDescriptor_t simpleDescList = 5;
+  required nwkDeviceStatus_t deviceStatus = 6;
+}
+
+message nwkNeighborInfo_t
+{
+  required fixed64 extendedPanId = 1;       // Extended PAN ID of the neighbor device
+  required fixed64 extendedAddress = 2;     // IEE Address
+  required uint32 networkAddress = 3;       // (uint16) short Address
+  required nwkDeviceType_t deviceType = 4;  // Device Type
+  required nwkRxOnWhenIdle_t idle = 5;      // RxOnWhenIdle setting
+  required nwkRelationship_t relation = 6;  // Relationship
+  required nwkPermitJoiningStatus_t permitJoining = 7;  // Permit Joining status
+  required uint32 depth = 8;                // (uint8) The tree depth of the neighbor device
+  required uint32 lqi = 9;                  // (uint8) The estimated link quality for RF
+}
+
+message nwkRoutingInfo_t
+{
+  required uint32 dstAddr = 1;            // (uint16) network (short) address of the route destination
+  required nwkRouteStatus_t status = 2;   // Route status
+  required uint32 nextHop = 3;            // (uint16) network address of the next hop in the route
+}
+
+//---------------------------------------------------
+// Generic API Set
+//---------------------------------------------------
+
+// ZIGBEE_GENERIC_CNF
+
+message NwkZigbeeGenericCnf
+{
+  // ZIGBEE_GENERIC_CNF - command ID used to identify this message
+  // Generic Confirmation - This message is called by the gateway sub-system to notify the application
+  // about the status of a command that was sent by the application.
+  // No specific response message
+
+  required nwkMgrCmdId_t cmdId = 1 [default = ZIGBEE_GENERIC_CNF];  // don't change this field
+  required nwkStatus_t status = 2;
+  optional uint32 sequenceNumber = 3;     // (uint16) transaction sequence number  
+}
+
+// ZIGBEE_GENERIC_RSP_IND
+
+message NwkZigbeeGenericRspInd
+{
+  // ZIGBEE_GENERIC_RSP_IND - command ID used to identify this message
+  // Generic Response Indication - This message is called by the gateway sub-system to notify the application
+  // about the status of a command that was sent by the application. It is sent asynchronously when a default
+  // response is received over-the-air from the destination device.
+  // No specific response message
+
+  required nwkMgrCmdId_t cmdId = 1 [default = ZIGBEE_GENERIC_RSP_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;     // (uint16) transaction sequence number  
+  required nwkStatus_t status = 3;
+}
+
+//---------------------------------------------------
+// Local Device Control/Information API Set
+//---------------------------------------------------
+
+// NWK_ZIGBEE_SYSTEM_RESET_REQ
+
+message NwkZigbeeSystemResetReq
+{
+  // NWK_ZIGBEE_SYSTEM_RESET_REQ - command ID used to identify this message
+  // System Reset Request - This message is sent by the application to issue a
+  // ZigBee core stack reset and restart. The stack database (core ZigBee stack) is 
+  // maintained or reset to factory new depending on the API message parameter
+  // Returns NwkZigbeeSystemResetCnf
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_ZIGBEE_SYSTEM_RESET_REQ];  // don't change this field
+  required nwkResetMode_t mode = 2;   // Reset mode  
+}
+
+// NWK_ZIGBEE_SYSTEM_RESET_CNF
+
+message NwkZigbeeSystemResetCnf
+{
+  // NWK_ZIGBEE_SYSTEM_RESET_CNF - command ID used to identify this message
+  // System Reset Confirmation - This message is sent by the subsystem to 
+  // report that it has successfully completed a reset request.
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_ZIGBEE_SYSTEM_RESET_CNF];  // don't change this field
+  required nwkStatus_t status = 2;
+  required nwkResetMode_t resetMode = 3;      // reset mode 
+}
+
+// NWK_ZIGBEE_SYSTEM_SELF_SHUTDOWN_REQ
+
+message NwkZigbeeSystemSelfShutdownReq
+{
+  // NWK_ZIGBEE_SYSTEM_SELF_SHUTDOWN_REQ - command ID used to identify this message
+  // System Self Shutdown Request - This message is sent to shutdown the ZigBee system: Turn off the 
+  // ZigBee/802.15.4 device;
+  // Finish on-going database activity; Close all socket connections; Terminate the gateway 
+  // sub-system processes.
+  // No specific response message
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_ZIGBEE_SYSTEM_SELF_SHUTDOWN_REQ];  // don't change this field
+}
+
+// NWK_SET_ZIGBEE_POWER_MODE_REQ
+
+message NwkSetZigbeePowerModeReq
+{
+  // NWK_SET_ZIGBEE_POWER_MODE_REQ - command ID used to identify this message
+  // Set ZigBee Power Mode Request - This message is sent to set the ZigBee/802.15.4 device's power mode.
+  // Returns NwkSetZigbeePowerModeCnf
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_SET_ZIGBEE_POWER_MODE_REQ];  // don't change this field
+  required nwkPowerMode_t powerMode = 2;   // Power Mode type  
+}
+
+// NWK_SET_ZIGBEE_POWER_MODE_CNF
+
+message NwkSetZigbeePowerModeCnf
+{
+  // NWK_SET_ZIGBEE_POWER_MODE_CNF - command ID used to identify this message
+  // Set ZigBee Power Mode Confirmation - This message is called by the subsystem to
+  // report that it has successfully completed a power mode request
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_SET_ZIGBEE_POWER_MODE_CNF];  // don't change this field
+  required nwkStatus_t status = 2;
+  required nwkPowerMode_t powerMode = 3;   // Power Mode type  
+}
+
+// NWK_GET_LOCAL_DEVICE_INFO_REQ
+
+message NwkGetLocalDeviceInfoReq
+{
+  // NWK_GET_LOCAL_DEVICE_INFO_REQ - command ID used to identify this message
+  // Get Local Device Information Request - This API is called by the gateway application to retrieve
+  // information regarding the gateway device itself, including a list of registered endpoints with 
+  // descriptors.
+  // Returns NwkGetLocalDeviceInfoCnf 
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_GET_LOCAL_DEVICE_INFO_REQ];  // don't change this field
+}
+
+// NWK_GET_LOCAL_DEVICE_INFO_CNF
+
+message NwkGetLocalDeviceInfoCnf
+{
+  // NWK_GET_LOCAL_DEVICE_INFO_CNF - command ID used to identify this message
+  // Get Local Device Information Confirmation - This API is called by the gateway sub-system to report the
+  // information relative to the gateway device.
+  // Response to NwkGetLocalDeviceInfoReq 
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_GET_LOCAL_DEVICE_INFO_CNF];  // don't change this field
+  required nwkDeviceInfo_t deviceInfoList = 2;  
+}
+
+// NWK_ZIGBEE_NWK_READY_IND
+
+message NwkZigbeeNwkReadyInd
+{
+  // NWK_ZIGBEE_NWK_READY_IND - command ID used to identify this message
+  // Network Ready Indication - This message reports information about the current ZigBee network.
+  // No specific response message
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_ZIGBEE_NWK_READY_IND];  // don't change this field
+  required uint32 nwkChannel = 2;   // (uint8) MAC Channel ID
+  required uint32 panId = 3;        // (uint16) Network PAN ID
+  required fixed64 extPanId = 4;    // (uint64) Extended PAN ID
+}
+
+//---------------------------------------------------
+// Network Control/Information API set
+//---------------------------------------------------
+
+// NWK_ZIGBEE_NWK_INFO_REQ
+
+message NwkZigbeeNwkInfoReq
+{
+  // NWK_ZIGBEE_NWK_INFO_REQ - command ID used to identify this message
+  // Network Information Request - This message is sent by the application
+  // to request information about the current ZigBee network.
+  // Returns NwkZigbeeNwkInfoCnf
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_ZIGBEE_NWK_INFO_REQ];  // don't change this field
+  // no payload
+}
+
+// NWK_ZIGBEE_NWK_INFO_CNF
+
+message NwkZigbeeNwkInfoCnf
+{
+  // NWK_ZIGBEE_NWK_INFO_CNF - command ID used to identify this message
+  // Network Information Confirm - This message is sent to report to the gateway application information about
+  // the current ZigBee network.
+  // Sent as a response to NwkZigbeeNwkInfoReq
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_ZIGBEE_NWK_INFO_CNF];  // don't change this field
+  required nwkNetworkStatus_t status = 2;   // Network down/up
+  required uint32 nwkChannel = 3;           // (uint8)  MAC Channel ID
+  required uint32 panId = 4;                // (uint16) Network PAN ID
+  required fixed64 extPanId = 5;            // (uint64) extended PAN ID
+}
+
+// NWK_SET_PERMIT_JOIN_REQ
+
+message NwkSetPermitJoinReq
+{
+  // NWK_SET_PERMIT_JOIN_REQ - command ID used to identify this message
+  // Set Permit Join Request - This message is sent by the application to set the 
+  // Permit Join state to the device and/or network.
+  // No specific response message
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_SET_PERMIT_JOIN_REQ];  // don't change this field
+  required nwkPermitJoinType_t permitJoin = 2;   // Distribute of this request
+  required uint32 permitJoinTime = 3;            // (uint8) Duration in seconds to turn on Permit Join
+                                                 // 0x00 - Turns Permit Join off - no duration
+                                                 // 0xFF - Turn Permit Join On - no duration
+}
+
+// NWK_MANAGE_PERIODIC_MTO_ROUTE_REQ
+
+message NwkManagePeriodicMtoRouteReq
+{
+  // NWK_MANAGE_PERIODIC_MTO_ROUTE_REQ - command ID used to identify this message
+  // Manage Periodic MTO Route Request - This message is sent to start a periodic many-to-one route request maintenance
+  // scheme or to stop it.
+  // No specific response message
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_MANAGE_PERIODIC_MTO_ROUTE_REQ];  // don't change this field
+  required nwkMtoRouteMode_t mode = 2;
+}
+
+// NWK_GET_NEIGHBOR_TABLE_REQ
+
+message NwkGetNeighborTableReq
+{
+  // NWK_GET_NEIGHBOR_TABLE_REQ - command ID used to identify this message
+  // Get Neighbor Table Request - This message is sent by the application to retrieve the 
+  // neighbor table of a destination device.
+  // Returns NwkGetNeighborTableRspInd
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_GET_NEIGHBOR_TABLE_REQ];  // don't change this field
+  required nwkAddressStruct_t dstAddr = 2;    // destination address
+  required uint32 startIndex = 3;             // (uint8) Specifies where to start in the response array list.
+                                              // The result may contain more entries than can be reported, 
+                                              // so this field allows the user to retrieve the responses 
+                                              // anywhere in the array list.
+}
+
+// NWK_GET_NEIGHBOR_TABLE_RSP_IND
+
+message NwkGetNeighborTableRspInd
+{
+  // NWK_GET_NEIGHBOR_TABLE_RSP_IND - command ID used to identify this message
+  // Get Neighbor Table Response Indication
+  // Sent as a response to NwkGetNeighborTableReq
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_GET_NEIGHBOR_TABLE_RSP_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;           // (uint16) transaction sequence number
+  required nwkStatus_t status = 3;
+  required nwkAddressStruct_t srcAddr = 4;      // source address
+  required uint32 neighborTableEntries = 5;     // (uint8) Total number of entries available in the device
+  required uint32 startIndex = 6;               // (uint8) Where in the total number of entries this response starts.
+  repeated nwkNeighborInfo_t neighborList = 7;  // Array of neighbor info records
+}
+
+// NWK_GET_ROUTING_TABLE_REQ
+
+message NwkGetRoutingTableReq
+{
+  // NWK_GET_ROUTING_TABLE_REQ - command ID used to identify this message
+  // Get Routing Table Request - This message is sent by the application to retrieve the 
+  // routing table of a destination device.
+  // Returns NwkGetRoutingTableRspInd
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_GET_ROUTING_TABLE_REQ];  // don't change this field
+  required nwkAddressStruct_t dstAddr = 2;
+  required uint32 startIndex = 3;           // (uint8) Specifies where to start in the response array list.
+                                            // The result may contain more entries than can be reported, 
+                                            // so this field allows the user to retrieve the responses 
+                                            // anywhere in the array list.
+}
+
+// NWK_GET_ROUTING_TABLE_RSP_IND
+
+message NwkGetRoutingTableRspInd
+{
+  // NWK_GET_ROUTING_TABLE_RSP_IND - command ID used to identify this message
+  // Get Routing Table Response Indication
+  // Sent as a response to NwkGetRoutingTableReq
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_GET_ROUTING_TABLE_RSP_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;         // (uint16) transaction sequence number
+  required nwkStatus_t status = 3;            // success/failure
+  required nwkAddressStruct_t srcAddr = 4;       // source address
+  required uint32 routingTableEntries = 5;    // (uint8) Total number of entries available in the device
+  required uint32 startIndex = 6;             // (uint8) Where in the total number of entries this response starts.
+  repeated nwkRoutingInfo_t routingList = 7;  // Array of routing info records
+}
+
+// NWK_CHANGE_NWK_KEY_REQ
+
+message NwkChangeNwkKeyReq
+{
+  // NWK_CHANGE_NWK_KEY_REQ - command ID used to identify this message
+  // Change Network Key Request - This message is called by the application to 
+  // change the active network key to a new key.
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_CHANGE_NWK_KEY_REQ];  // don't change this field
+  optional bytes newKey = 2;      // 16 bytes for network key
+}
+
+// NWK_GET_NWK_KEY_REQ
+
+message NwkGetNwkKeyReq
+{
+  // NWK_GET_NWK_KEY_REQ - command ID used to identify this message
+  // Get Network Key Request - This message is called by the application to 
+  // request the current active ZigBee network key.
+  // Responds with NwkGetNwkKeyCnf
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_GET_NWK_KEY_REQ];  // don't change this field
+}
+
+// NWK_GET_NWK_KEY_CNF
+
+message NwkGetNwkKeyCnf
+{
+  // NWK_GET_NWK_KEY_CNF - command ID used to identify this message
+  // Get Network Key Confirmation - This message is called by the gateway subsystem to 
+  // report the current active ZigBee network key.
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_GET_NWK_KEY_CNF];  // don't change this field
+  required nwkStatus_t status = 2;
+  required bytes newKey = 3;        // 16 bytes for current active ZigBee network key
+}
+
+//---------------------------------------------------
+// Device Management API set
+//---------------------------------------------------
+
+// NWK_ZIGBEE_DEVICE_IND
+
+message NwkZigbeeDeviceInd
+{
+  // NWK_ZIGBEE_DEVICE_IND - command ID used to identify this message
+  // ZigBee Device Indication - This message is sent asynchronously when a device is discovered
+  // No specific response message
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_ZIGBEE_DEVICE_IND];  // don't change this field
+  required nwkDeviceInfo_t deviceInfo = 2;        // Device information
+}
+
+// NWK_GET_DEVICE_LIST_REQ
+
+message NwkGetDeviceListReq
+{
+  // NWK_GET_DEVICE_LIST_REQ - command ID used to identify this message
+  // Get Device List Request - This message is sent by the application to request device information
+  // from the Network Manager's stored database.  The returned information can pertain to one device 
+  // or all devices.
+  // Returns NwkGetDeviceListCnf
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_GET_DEVICE_LIST_REQ];  // don't change this field
+  optional nwkAddressStruct_t dstAddr = 2;         // if included will return just this one device's 
+                                                // nwkMgrDeviceInd message, otherwise process all devices
+}
+
+// NWK_GET_DEVICE_LIST_CNF
+
+message NwkGetDeviceListCnf
+{
+  // NWK_GET_DEVICE_LIST_CNF - command ID used to identify this message
+  // Get Device List Confirmation
+  // Sent as a response to NwkGetDeviceListReq
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_GET_DEVICE_LIST_CNF];  // don't change this field
+  required nwkStatus_t status = 2;
+  repeated nwkDeviceInfo_t deviceList = 3;     // Device list information
+}
+
+// NWK_DEVICE_LIST_MAINTENANCE_REQ
+
+message NwkDeviceListMaintenanceReq
+{
+  // NWK_DEVICE_LIST_MAINTENANCE_REQ - command ID used to identify this message
+  // Device List Maintenance Request - This message is sent to the gateway sub-system to re-discover services for a 
+  // device(s) in order to update the device list database.
+  // No specific response message
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_DEVICE_LIST_MAINTENANCE_REQ];  // don't change this field
+  optional nwkAddressStruct_t dstAddr = 2;    // if not included, send to all devices
+}
+
+// NWK_REMOVE_DEVICE_REQ
+
+message NwkRemoveDeviceReq
+{
+  // NWK_REMOVE_DEVICE_REQ - command ID used to identify this message
+  // Remove Device Request - This message is sent to the gateway sub-system to re-discover services for a 
+  // device(s) in order to update the device list database.
+  // No specific response message
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_REMOVE_DEVICE_REQ];  // don't change this field
+  required nwkAddressStruct_t dstAddr = 2;   // address of device to be removed
+  required nwkLeaveMode_t leaveMode = 3;
+}
+
+//---------------------------------------------------
+// Device Pairing API set
+//---------------------------------------------------
+
+// NWK_SET_BINDING_ENTRY_REQ
+
+message NwkSetBindingEntryReq
+{
+  // NWK_SET_BINDING_ENTRY_REQ - command ID used to identify this message
+  // Set Binding Entry Request - This message is sent by the application to make a binding on a device (for that device).
+  // Returns NwkSetBindingEntryRspInd
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_SET_BINDING_ENTRY_REQ];  // don't change this field
+  required nwkAddressStruct_t srcAddr = 2;        // address of the node for initiating binding
+  required uint32 clusterId = 3;               // (uint16) cluster ID used to transport data between entries
+  required nwkAddressStruct_t dstAddr = 4;        // address of the target node for binding
+  required nwkBindingMode_t bindingMode = 5;   
+}
+
+// NWK_SET_BINDING_ENTRY_RSP_IND
+
+message NwkSetBindingEntryRspInd
+{
+  // NWK_SET_BINDING_ENTRY_RSP_IND - command ID used to identify this message
+  // Set Binding Entry Response Indication - This message is sent when the binding has been completed and 
+  // the ZigBee ZDO binding response message had been received.
+  // Sent as a response to NwkSetBindingEntryReq
+
+  required nwkMgrCmdId_t cmdId = 1 [default = NWK_SET_BINDING_ENTRY_RSP_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;      // (uint16) transaction sequence number
+  required nwkStatus_t status = 3;
+  required nwkAddressStruct_t srcAddr = 4;    // address of the node where the binding entry was created
+}
+
+

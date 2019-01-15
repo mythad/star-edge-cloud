@@ -1,0 +1,239 @@
+//----------------------------------------------------------------------------
+//  Filename:       otasrvr.proto
+//  Revised:        $Date$
+//  Revision:       $Revision$
+//
+//  Description:    TI ZStack Over-The-Air Server Protocol Buffers Definition File
+//
+//
+//  Copyright 2013 Texas Instruments Incorporated. All rights reserved.
+//
+//  IMPORTANT: Your use of this Software is limited to those specific rights
+//  granted under the terms of a software license agreement between the user
+//  who downloaded the software, his/her employer (which must be your employer)
+//  and Texas Instruments Incorporated (the "License").  You may not use this
+//  Software unless you agree to abide by the terms of the License. The License
+//  limits your use, and you acknowledge, that the Software may not be modified,
+//  copied or distributed unless embedded on a Texas Instruments microcontroller
+//  or used solely and exclusively in conjunction with a Texas Instruments radio
+//  frequency transceiver, which is integrated into your product.  Other than for
+//  the foregoing purpose, you may not use, reproduce, copy, prepare derivative
+//  works of, modify, distribute, perform, display or sell this Software and/or
+//  its documentation for any purpose.
+//
+//  YOU FURTHER ACKNOWLEDGE AND AGREE THAT THE SOFTWARE AND DOCUMENTATION ARE
+//  PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+//  INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF MERCHANTABILITY, TITLE,
+//  NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT SHALL
+//  TEXAS INSTRUMENTS OR ITS LICENSORS BE LIABLE OR OBLIGATED UNDER CONTRACT,
+//  NEGLIGENCE, STRICT LIABILITY, CONTRIBUTION, BREACH OF WARRANTY, OR OTHER
+//  LEGAL EQUITABLE THEORY ANY DIRECT OR INDIRECT DAMAGES OR EXPENSES
+//  INCLUDING BUT NOT LIMITED TO ANY INCIDENTAL, SPECIAL, INDIRECT, PUNITIVE
+//  OR CONSEQUENTIAL DAMAGES, LOST PROFITS OR LOST DATA, COST OF PROCUREMENT
+//  OF SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
+//  (INCLUDING BUT NOT LIMITED TO ANY DEFENSE THEREOF), OR OTHER SIMILAR COSTS.
+//
+//  Should you have any questions regarding your right to use this Software,
+//  contact Texas Instruments Incorporated at www.TI.com.
+//----------------------------------------------------------------------------
+
+
+//-----------------------------------------
+// Constants and definitions
+//-----------------------------------------
+
+// MT System ID for ZStack Network Manager Protobuf sub-system ID
+enum ZStackOTASysIDs
+{
+  RPC_SYS_PB_OTA_MGR = 20;
+}
+
+// Command IDs - each of these are associated with Request, Responses, Indications, and Confirm messages
+enum otaMgrCmdId_t 
+{
+  ZIGBEE_GENERIC_CNF = 0;
+  ZIGBEE_GENERIC_RSP_IND = 1;
+
+  OTA_UPDATE_IMAGE_REGISTERATION_REQ = 2;
+  OTA_UPDATE_ENABLE_REQ = 3;
+  OTA_UPDATE_ENABLE_CNF = 4;
+  OTA_UPDATE_DL_FINISHED_IND = 5;
+  OTA_UPDATE_APPLY_IMAGE_REQ = 6;
+}
+
+enum AddressMode
+{
+  UNICAST = 0;                     // Unicast/Single device (using 64 bit IEEE Address)
+  GROUPCAST = 1;                   // Groupcast (using 16 bit group ID)
+  BROADCAST = 2;                   // Broadcast (using 16 bit broacast address)
+  SELF = 3;                        // Self addressing - referring to the gateway device itself. No address is specified
+}
+
+enum genericStatus
+{
+  SUCCESS = 0;
+  FAILURE = 1;
+}
+enum OtaStatus
+{
+  OTA_SUCCESS = 0;                 // 
+  INVALID_IMAGE = 1;               // 
+  REQUIRE_MORE_IMAGE = 2;          // 
+  ABORT = 3;                       // 
+}
+
+enum OtaExecuteType
+{
+  IMMEDIATE = 0;                         // execute (apply) immediate 
+  DELAY = 1;                             // execute delay is specified
+  TIME = 2;                              // execute time is specified
+  HOLD = 3;                              // hold execution
+  NO_CHANGE = 255;                       // no change (valid only if the file is already registered)
+}
+
+enum OtaNotificationType
+{
+  DO_NOT_SEND = 0;                       // Do not send notification
+  BROADCAST_NOT = 1;                     // Broadcast notification
+  UNICAST_NOT = 2;                       // Unicast notification
+}
+
+enum OtaUpdateCnfStatus
+{
+  UPDATE_SUCCESS = 0;                    // Success
+  BAD_FILE_FORMAT = 1;                   // Bad file format
+  CANT_UNREGISTER = 2;                   // Cannot unregister (download is in progress)
+  OUT_OF_RESOURCES = 3;                  // Out of resources
+}
+
+enum OtaEnableModes
+{
+  DOWNLOAD_ENABLE = 0;                   // OTA download enabled 
+  NEW_DOWNLOAD_DISABLE = 1;              // New OTA downloads disable. Active downloads are not interrupted.
+  DOWNLOAD_DISABLE = 2;                  // OTA download disable. Active downloads are immediately aborted.
+}
+
+//----------------------------------------------------------------------------------------------
+// Structures - submessages, these aren't sent as messages but are included within other messages
+//----------------------------------------------------------------------------------------------
+
+message AddressStruct
+{
+  required AddressMode addrMode = 1;      // Address Mode
+  optional fixed64 ieeeAddr = 2;          // Device's unique 64 bit IEEE Address (addrMode == UNICAST)
+  optional uint32 groupAddr = 3;          // (uint16) group address (addrMode == GROUPCAST)
+  optional uint32 broadcaseAddr = 4;      // (uint16) broadcast address (addrMode == BROADCAST)
+  optional uint32 endpointID = 5;         // (uint8) Endpoint ID. If ommitted, it means referring to all endpoints.
+}
+
+//---------------------------------------------------
+// Over-the-air Upgrade API set
+//---------------------------------------------------
+
+// ZIGBEE_GENERIC_CNF
+message OtaZigbeeGenericCnf
+{
+  // ZIGBEE_GENERIC_CNF - command ID used to identify this message
+  // Generic Confirmation - This message is called by the gateway application
+  // to notify about the status of a command that was sent by the application.
+  // No specific response message
+
+  required otaMgrCmdId_t cmdId = 1 [default = ZIGBEE_GENERIC_CNF];  // don't change this field
+  required genericStatus status = 2;
+  optional uint32 sequenceNumber = 3;    // (uint16) transaction sequence number
+}
+
+// ZIGBEE_GENERIC_RSP_IND
+
+message OtaZigbeeGenericRspInd
+{
+  // ZIGBEE_GENERIC_RSP_IND - command ID used to identify this message
+  // Generic Response Indication - This message is called by the gateway application
+  // to notify the application about the status of a command sent by the application.
+  // No specific response message
+
+  required otaMgrCmdId_t cmdId = 1 [default = ZIGBEE_GENERIC_RSP_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;    // (uint16) transaction sequence number
+  required genericStatus status = 3;
+}
+
+// OTA_UPDATE_IMAGE_REGISTERATION_REQ
+
+message OtaUpdateImageRegisterationReq
+{
+  // OTA_UPDATE_IMAGE_REGISTERATION_REQ - command ID used to identify this message
+  // Over The Air (OTA) Update Request - to register a new image that can be downloaded by remote 
+  // devices, or to unregister a previously registered image, so it is not available for download 
+  // anymore. It can also be used to update parameters (e.g. ExecutionDelay) of files that are 
+  // already registered. Note: The way the host filesystem retrieves the image from the backhaul 
+  // network is outside the scope of this document
+  // Returns OtaUpdateCnf 
+
+  required otaMgrCmdId_t cmdID = 1 [default = OTA_UPDATE_IMAGE_REGISTERATION_REQ];  // don't change this field
+  required string imagePath = 2;        // The full path+filename of the image. The image should be located on the local file system.
+  required bool registerUnregister = 3; // 0 – Unregister existing image. In this case – the following arguments shall NOT be specified.
+                                        // 1 – Registrer new image, or update the HoldExecution state. 
+  required OtaExecuteType executeTiming = 4; // Execution timing type
+  optional uint32 executionDelay = 5;   // Shall be specified only when executeTiming == DELAY
+  optional uint32 executionTime = 6;    // Shall be specified only when executeTiming == TIME
+
+  required bool updateSupportedDeviceList = 7;	//0 – do not change the supported device list (valid only if the file is already registered)
+						//1 – Use the supported device list that is specified in the following parameter. In this case, if SupportedDeviceList is empty, the image is intended to any applicable device in the network.
+  
+  repeated fixed64 supportedDeviceList = 8; // Array of IEEE Addresses of the devices that this image is intended.  
+                                            // If there are no devices in the list, the image is intended for any applicable device, 
+                                            // or if the image already exists, there is not change to the existing device list.
+  required OtaNotificationType notification = 9;  // Notification type
+}
+
+// OTA_UPDATE_ENABLE_REQ
+
+message OtaUpdateEnableReq
+{
+  // OTA_UPDATE_ENABLE_REQ - command ID used to identify this message
+  // OTA Update Enable Request - to enable or disable OTA download activity.
+  // Returns OtaUpdateEnableCnf 
+
+  required otaMgrCmdId_t cmdID = 1 [default = OTA_UPDATE_ENABLE_REQ];  // don't change this field
+  required OtaEnableModes mode = 2; // Download enable mode.
+}
+
+// OTA_UPDATE_ENABLE_CNF
+
+message OtaUpdateEnableCnf
+{
+  // OTA_UPDATE_ENABLE_CNF - command ID used to identify this message
+  // Over The Air Update Enable Response. 
+  // Sent as a response to OtaUpdateEnableReq.
+
+  required otaMgrCmdId_t cmdID = 1 [default = OTA_UPDATE_ENABLE_CNF];  // don't change this field
+  required bool status = 2;  // 0 - success, 1 - failure
+}
+
+// OTA_UPDATE_DOWNLOAD_FINISHED_IND
+
+message OtaUpdateDlFinishedInd
+{
+  // OTA_UPDATE_DL_FINISHED_IND - command ID used to identify this message
+  // Sent in response to nwkMgrOtaUpdateReq periodically during an OTA Update
+  // 
+
+  required otaMgrCmdId_t cmdID = 1 [default = OTA_UPDATE_DL_FINISHED_IND];  // don't change this field
+  required OtaStatus status = 2;       // Update status
+  required AddressStruct address = 3;  // The address of the reporting device
+}
+
+// OTA_UPDATE_APPLY_IMAGE_REQ
+
+message OtaUpdateApplyImageReq
+{
+  // OTA_UPDATE_APPLY_IMAGE_REQ - command ID used to identify this message
+  // OTA Update Apply Image Request - to instruct remote devices that they should apply a previously 
+  // downloaded image. This request must be used for images that has ExecutionTimingType set to “hold 
+  // execution” (see OTA_UPDATE_IMAGE_REGISTERATION_REQ). It should only be used after the device reported 
+  // OTA_UPDATE_DOWNLOAD_FINISHED_IND with status of “SUCCESS”.
+  // Returns OtaUpdateApplyImageCnf 
+
+  required otaMgrCmdId_t cmdID = 1 [default = OTA_UPDATE_ENABLE_REQ];  // don't change this field
+  required AddressStruct address = 2;  // 
+}

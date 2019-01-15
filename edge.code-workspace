@@ -1,0 +1,31 @@
+{
+	"folders": [
+		{
+			"path": "deploy"
+		},
+		{
+			"path": "edge/core"
+		},
+		{
+			"path": "edge/device"
+		},
+		{
+			"path": "edge/extension"
+		},
+		{
+			"path": "edge/log"
+		},
+		{
+			"path": "edge/models"
+		},
+		{
+			"path": "edge/store"
+		},
+		{
+			"path": "edge/transport"
+		},
+		{
+			"path": "edge/utils"
+		}
+	]
+}

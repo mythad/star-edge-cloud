@@ -1,0 +1,369 @@
+<html dir="ltr">
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<meta name="msapplication-TileColor" content="#0f75ff">
+	<meta name="theme-color" content="#2ddcd3">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<link rel="icon" href="./images/favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" type="image/x-icon" href="./images/favicon.ico">
+
+	<!-- Title -->
+	<title>星云物联</title>
+	<link rel="stylesheet" href="./css/font-awesome.css">
+	<!-- <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css"> -->
+	<!-- Font Family-->
+	<link href="./css/css.css" rel="stylesheet">
+
+	<!-- Sidemenu Css -->
+	<link href="./css/style.css" rel="stylesheet">
+	<link href="./css/waves.css" rel="stylesheet">
+
+	<!-- Bootstrap Css -->
+	<link href="./css/bootstrap.css" rel="stylesheet">
+
+	<!-- Dashboard Css -->
+	<link href="./css/dashboard.css" rel="stylesheet">
+	<link href="./css/index.css" rel="stylesheet">
+	<!-- JQVMap -->
+	<!-- <link href="./css/jqvmap.css" rel="stylesheet"> -->
+
+	<!-- Morris.js Charts Plugin -->
+	<!-- <link href="./css/morris.css" rel="stylesheet"> -->
+
+	<!-- Custom scroll bar css-->
+	<!-- <link href="./css/jquery.css" rel="stylesheet"> -->
+
+	<!---Font icons-->
+	<!-- <link href="./css/plugin.css" rel="stylesheet"> -->
+</head>
+
+<body>
+	<!-- <div id="loading" style="display: none;"></div> -->
+	<div class="page">
+		<div class="page-main">
+			<div class="app-header1 header py-1 d-flex">
+				<div class="container-fluid">
+					<div class="d-flex">
+
+						<a class="header-brand" href="#">
+							<img src="./images/logo.png" class="header-brand-img" alt="Uplor  logo">
+						</a>
+						<div class="menu-toggle-button">
+							<a class="nav-link wave-effect waves-effect waves-button" href="#" id="sidebarCollapse">
+								<span class="fa fa-bars"></span>
+							</a>
+						</div>
+						<div class="d-flex order-lg-2 ml-auto">
+							<div class="dropdown d-none d-md-flex country-selector">
+								<a href="#" class="d-flex nav-link leading-none" data-toggle="dropdown">
+									<!-- <i class="fa fa-location-arrow fa-2x"></i> -->
+									<div>
+										<strong class="text-white">中文</strong>
+									</div>
+								</a>
+								<div class="language-width dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+									<a href="#" class="dropdown-item d-flex pb-3">
+										<img src="./images/french_flag.jpg" alt="flag-img" class="avatar  mr-3 align-self-center">
+										<div>
+											<strong>English</strong>
+										</div>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="wrapper">
+				<!-- Sidebar Holder -->
+				<nav id="sidebar" class="nav-sidebar mCustomScrollbar _mCS_1 mCS-autoHide" style="overflow: visible;">
+					<div id="mCSB_1" class="mCustomScrollBox mCS-minimal mCSB_vertical mCSB_outside" style="max-height: none;"
+					 tabindex="0">
+						<div id="mCSB_1_container" class="mCSB_container" style="position:relative; top:0; left:0;" dir="ltr">
+							<div class="profile clearfix active">
+								<div class="profile_pic">
+									<img src="./images/25.jpg" alt=".." class="img-circle profile_img mCS_img_loaded">
+									<a href="#" class="profile-img">
+										<span class="fa fa-pencil" aria-hidden="true"></span>
+									</a>
+								</div>
+								<div class="profile_info">
+									<h2>云端管理</h2>
+									<!-- <span>Web Designer</span> -->
+								</div>
+							</div>
+							<ul class="list-unstyled components" id="accordion">
+								<li>
+									<a href="#homeSubmenu" class="accordion-toggle wave-effect waves-effect waves-button active" data-toggle="collapse"
+									 aria-expanded="true">
+										<i class="fa fa-television mr-2 sidebarsuccess"></i>综合
+									</a>
+									<ul class="collapse list-unstyled " id="homeSubmenu" data-parent="#accordion">
+										<li>
+											<a href="index.html">统计</a>
+										</li>
+										<li>
+											<a href="index.html">算法服务</a>
+										</li>
+										<li>
+											<a href="index.html">存储服务</a>
+										</li>
+										<li>
+											<a href="index.html">元数据</a>
+										</li>
+
+									</ul>
+								</li>
+								<li>
+									<a href="#Submenu8" class="accordion-toggle wave-effect waves-effect waves-button active" data-toggle="collapse"
+									 aria-expanded="false">
+										<i class="fa fa-futbol-o mr-2 sidebarred"></i>Docker
+									</a>
+									<ul class="collapse list-unstyled" id="Submenu8" data-parent="#accordion">
+										<li class="active">
+											<a href="node.html" class="active">节点</a>
+										</li>
+										<li class="active">
+											<a href="container.html">容器</a>
+										</li>
+										<li>
+											<a href="image.html">镜像</a>
+										</li>
+										<li>
+											<a href="volumn.html">卷</a>
+										</li>
+										<li>
+											<a href="network.html">网络</a>
+										</li>
+
+									</ul>
+								</li>
+								<li>
+									<a href="#Submenu9" class="accordion-toggle wave-effect waves-effect waves-button active" data-toggle="collapse"
+									 aria-expanded="false">
+										<i class="fa fa-futbol-o mr-2 sidebarred"></i>其他
+									</a>
+									<ul class="collapse list-unstyled" id="Submenu9" data-parent="#accordion">
+										<li>
+											<a href="log.html">日志</a>
+										</li>
+										<li>
+											<a href="help.html">帮助</a>
+										</li>
+										<li>
+											<a href="#">智能算法SDK</a>
+										</li>
+
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div id="mCSB_1_scrollbar_vertical" class="mCSB_scrollTools mCSB_1_scrollbar mCS-minimal mCSB_scrollTools_vertical"
+					 style="display: block;">
+						<div class="mCSB_draggerContainer">
+							<div id="mCSB_1_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 50px; display: block; height: 594px; max-height: 869px; top: 0px;">
+								<div class="mCSB_dragger_bar" style="line-height: 50px;"></div>
+							</div>
+							<div class="mCSB_draggerRail"></div>
+						</div>
+					</div>
+				</nav>
+				<div class=" content-area ">
+					<div class="page-header">
+						<h4 class="page-title">运行状态</h4>
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item">
+								Running Status
+							</li>
+							<!-- <li class="breadcrumb-item active" aria-current="page">Dashboard 01</li> -->
+						</ol>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-12 col-lg-4">
+							<div class="card overflow-hidden">
+								<div class="card-header">
+									<h3 class="card-title">实施数据总数</h3>
+									<div class="card-options">
+										<a class="btn btn-sm btn-primary" href="#">查看</a>
+									</div>
+								</div>
+								<div class="card-body ">
+									<div id="rdcount" style="height:100%">0</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12 col-lg-4">
+							<div class="card overflow-hidden">
+								<div class="card-header">
+									<h3 class="card-title">物理设备</h3>
+									<div class="card-options">
+										<a class="btn btn-sm btn-primary" href="#">查看</a>
+									</div>
+								</div>
+								<div class="card-body ">
+
+									<small class="h6">运行设备</small>
+									<div class="text-dark count mt-0 font-30">0 / 0</div>
+
+									<div class="progress progress-sm mt-0 mb-2">
+										<div class="progress-bar bg-success w-35" role="progressbar"></div>
+									</div>
+									<!-- <div class="">
+													<i class="fa fa-caret-up text-green"></i> 10% increases</div> -->
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12 col-lg-4">
+							<div class="card overflow-hidden">
+								<div class="card-header">
+									<h3 class="card-title">算法服务</h3>
+									<div class="card-options">
+										<a class="btn btn-sm btn-primary" href="#">查看</a>
+									</div>
+								</div>
+								<div class="card-body ">
+									<div id="piee" style="height:100%">1 / 6</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12 col-lg-4">
+							<div class="card overflow-hidden">
+								<div class="card-header">
+									<h3 class="card-title">存储服务</h3>
+									<div class="card-options">
+										<a class="btn btn-sm btn-primary" href="#">查看</a>
+									</div>
+								</div>
+								<div class="card-body ">
+									<div id="pies" style="height:100%">1 / 6</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12 col-lg-4">
+							<div class="card overflow-hidden">
+								<div class="card-header">
+									<h3 class="card-title">调度服务</h3>
+									<div class="card-options">
+										<a class="btn btn-sm btn-primary" href="#">查看</a>
+									</div>
+								</div>
+								<div class="card-body ">
+									<!-- <div class="text-dark count mt-0 font-30" id="pie" style="height:400px">1 / 6</div> -->
+									<!-- <div id="pie" style="height:100%">1 / 6</div> -->
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="card">
+								<div class="card-header">
+									<div class="card-title">日志</div>
+									<!-- <div class="card-options">
+									<a href="#" class="card-options-collapse" data-toggle="card-collapse">
+										<i class="fe fe-chevron-up"></i>
+									</a>
+									<a href="#" class="card-options-remove" data-toggle="card-remove">
+										<i class="fe fe-x"></i>
+									</a>
+								</div> -->
+								</div>
+								<div class="card-body">
+									<div class="table-responsive" id="log">
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<!-- <footer class="footer">
+			<div class="container">
+				<div class="row align-items-center flex-row-reverse">
+					<div class="col-md-12 col-sm-12 mt-3 mt-lg-0 text-center">
+						Copyright © 2018
+						<a href="#">Uplor </a>. Designed by
+						<a href="#">Spruko</a> All rights reserved.
+					</div>
+				</div>
+			</div>
+		</footer> -->
+		</div>
+
+		<!-- Back to top -->
+		<a href="#top" id="back-to-top">
+			<i class="fa fa-angle-up"></i>
+		</a>
+
+
+		<!-- Dashboard Core -->
+		<script src="./js/jquery-3.js"></script>
+		<script src="./js/popper.js"></script>
+		<script src="./js/bootstrap.js"></script>
+		<!-- <script src="./js/jquery_007.js"></script> -->
+		<!-- <script src="./js/selectize.js"></script> -->
+		<!-- <script src="./js/jquery.js"></script> -->
+		<!-- <script src="./js/circle-progress.js"></script> -->
+		<!-- <script src="./js/jquery_008.js"></script> -->
+
+		<!-- Fullside-menu Js-->
+		<!-- <script src="./js/jquery_005.js"></script> -->
+		<!-- <script src="./js/waves.js"></script> -->
+
+		<!-- Chart.js -->
+		<!-- <script src="./js/Chart.js"></script> -->
+
+		<!--Counters -->
+		<!-- <script src="./js/counterup.js"></script> -->
+		<!-- <script src="./js/waypoints.js"></script> -->
+
+		<!--Morris.js Charts Plugin -->
+		<!-- <script src="./js/raphael-min.js"></script> -->
+		<!-- <script src="./js/morris.js"></script> -->
+
+		<!-- Custom scroll bar Js-->
+		<!-- <script src="./js/jquery_004.js"></script> -->
+
+		<!-- jQuery Sparklines
+	<script src="./js/jquery_003.js"></script>
+
+	<!-- JQVMap -->
+		<!-- <script src="./js/jquery_006.js"></script> -->
+		<!-- <script src="./js/jquery_002.js"></script> -->
+		<!-- <script src="./js/jquery_009.js"></script> --> -->
+
+		<script src="./js/echarts.min.js"></script>
+		<!-- <script src="./js/index1.js"></script> -->
+
+
+		<!-- Custom Js-->
+		<script src="./js/custom.js"></script>
+		<!-- <script src="./js/jqvmap.js"></script> -->
+		<!-- <script src="./js/chartbundle.js"></script> -->
+
+		<!--Counters js-->
+		<!-- <script>
+		$('.count').countUp();
+	</script> -->
+		<script src="js/index.js"></script>
+
+		<!-- <div class="jqvmap-label" style="display: none;"></div> -->
+</body>
+
+</html>

@@ -1,0 +1,12 @@
+.title {
+    font-size: xx-large;
+}
+.hover {
+    background-color:lightgray;
+}
+.hand {
+    cursor:pointer;
+}
+.back {
+    color:yellow;
+}

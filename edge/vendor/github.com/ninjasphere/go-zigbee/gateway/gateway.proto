@@ -1,0 +1,1443 @@
+//  Filename:       gateway.proto
+//  Revised:        $Date$
+//  Revision:       $Revision$
+//
+//  Description:    TI ZStack Gateway Server 
+//                  Protocol Buffers Definition File
+//
+//
+//  Copyright 2013 Texas Instruments Incorporated. All rights reserved.
+//
+//  IMPORTANT: Your use of this Software is limited to those specific rights
+//  granted under the terms of a software license agreement between the user
+//  who downloaded the software, his/her employer (which must be your employer)
+//  and Texas Instruments Incorporated (the "License").  You may not use this
+//  Software unless you agree to abide by the terms of the License. The License
+//  limits your use, and you acknowledge, that the Software may not be modified,
+//  copied or distributed unless used solely and exclusively in conjunction with 
+//  a Texas Instruments radio frequency device, which is integrated into 
+//  your product.  Other than for the foregoing purpose, you may not use, 
+//  reproduce, copy, prepare derivative works of, modify, distribute, perform, 
+//  display or sell this Software and/or its documentation for any purpose.
+//
+//  YOU FURTHER ACKNOWLEDGE AND AGREE THAT THE SOFTWARE AND DOCUMENTATION ARE
+//  PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+//  INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF MERCHANTABILITY, TITLE,
+//  NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT SHALL
+//  TEXAS INSTRUMENTS OR ITS LICENSORS BE LIABLE OR OBLIGATED UNDER CONTRACT,
+//  NEGLIGENCE, STRICT LIABILITY, CONTRIBUTION, BREACH OF WARRANTY, OR OTHER
+//  LEGAL EQUITABLE THEORY ANY DIRECT OR INDIRECT DAMAGES OR EXPENSES
+//  INCLUDING BUT NOT LIMITED TO ANY INCIDENTAL, SPECIAL, INDIRECT, PUNITIVE
+//  OR CONSEQUENTIAL DAMAGES, LOST PROFITS OR LOST DATA, COST OF PROCUREMENT
+//  OF SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
+//  (INCLUDING BUT NOT LIMITED TO ANY DEFENSE THEREOF), OR OTHER SIMILAR COSTS.
+//
+//  Should you have any questions regarding your right to use this Software,
+//  contact Texas Instruments Incorporated at www.TI.com.
+//----------------------------------------------------------------------------
+
+
+//-----------------------------------------
+// Constants and definitions
+//-----------------------------------------
+
+// MT System ID for Gateway Protobuf sub-system ID
+enum zStackGwSysId_t
+{
+  RPC_SYS_PB_GW = 19;
+}
+
+// Command IDs - each of these are associated with Request, Responses, Indications, and Confirm messages
+enum gwCmdId_t 
+{
+  ZIGBEE_GENERIC_CNF = 0;
+
+  ZIGBEE_GENERIC_RSP_IND = 1;
+
+  GW_ADD_GROUP_REQ = 2;
+
+  GW_GET_GROUP_MEMBERSHIP_REQ = 3;
+  GW_GET_GROUP_MEMBERSHIP_RSP_IND = 4;
+
+  GW_REMOVE_FROM_GROUP_REQ = 5;
+
+  GW_STORE_SCENE_REQ = 6;
+
+  GW_REMOVE_SCENE_REQ = 7;
+
+  GW_RECALL_SCENE_REQ = 8;
+
+  GW_GET_SCENE_MEMBERSHIP_REQ = 9;
+  GW_GET_SCENE_MEMBERSHIP_RSP_IND = 10;
+
+  GW_SLEEPY_DEVICE_PACKET_PENDING_REQ = 11;
+
+  GW_SLEEPY_DEVICE_CHECK_IN_IND = 12;
+    
+  GW_ATTRIBUTE_CHANGE_IND = 13;
+    
+  GW_GET_DEVICE_ATTRIBUTE_LIST_REQ = 14;
+  GW_GET_DEVICE_ATTRIBUTE_LIST_RSP_IND = 15;
+ 
+  GW_READ_DEVICE_ATTRIBUTE_REQ = 16; 
+  GW_READ_DEVICE_ATTRIBUTE_RSP_IND = 17;     
+                 
+  GW_WRITE_DEVICE_ATTRIBUTE_REQ = 18; 
+  GW_WRITE_DEVICE_ATTRIBUTE_RSP_IND = 19; 
+    
+  GW_SET_ATTRIBUTE_REPORTING_REQ = 20;
+  GW_SET_ATTRIBUTE_REPORTING_RSP_IND = 21;
+    
+  GW_ATTRIBUTE_REPORTING_IND = 22;
+    
+  GW_SEND_ZCL_FRAME_REQ = 23;
+ 
+  GW_ZCL_FRAME_RECEIVE_IND = 24;
+ 
+  GW_ALARM_IND = 25;
+ 
+  GW_ALARM_RESET_REQ = 26;
+ 
+  DEV_ZONE_ENROLLMENT_REQ_IND = 27;
+  DEV_ZONE_ENROLLMENT_RSP = 28;
+
+  DEV_ZONE_STATUS_CHANGE_IND = 29;
+
+  DEV_ACE_ARM_REQ_IND = 30;
+  DEV_ACE_ARM_RSP = 31;
+
+  DEV_ACE_BYPASS_IND = 32;
+
+  DEV_ACE_EMERGENCY_CONDITION_IND = 33;
+
+  DEV_ACE_GET_ZONE_ID_MAP_REQ_IND = 34;
+  DEV_ACE_GET_ZONE_ID_MAP_RSP = 35;
+
+  DEV_ACE_GET_ZONE_INFORMATION_REQ_IND = 36;
+  DEV_ACE_GET_ZONE_INFORMATION_RSP = 37;
+
+  DEV_SET_IDENTIFY_MODE_REQ = 38;
+
+  DEV_SET_ONOFF_STATE_REQ = 39;
+
+  DEV_SET_LEVEL_REQ = 40;
+
+  DEV_GET_LEVEL_REQ = 41;
+  DEV_GET_LEVEL_RSP_IND = 42;
+
+  DEV_GET_ONOFF_STATE_REQ = 43;
+  DEV_GET_ONOFF_STATE_RSP_IND = 44;
+
+  DEV_SET_COLOR_REQ = 45;
+
+  DEV_GET_COLOR_REQ = 46;
+  DEV_GET_COLOR_RSP_IND = 47;
+
+  DEV_GET_TEMP_REQ = 48;
+  DEV_GET_TEMP_RSP_IND = 49;
+
+  DEV_GET_POWER_REQ = 50;
+  DEV_GET_POWER_RSP_IND = 51;
+
+  DEV_GET_HUMIDITY_REQ = 52;
+  DEV_GET_HUMIDITY_RSP_IND = 53;
+
+  DEV_SET_DOOR_LOCK_REQ = 54;
+  DEV_SET_DOOR_LOCK_RSP_IND = 55;
+
+  DEV_GET_DOOR_LOCK_STATE_REQ = 56;
+  DEV_GET_DOOR_LOCK_STATE_RSP_IND = 57;
+
+  DEV_THERMOSTAT_SETPOINT_CHANGE_REQ = 58;
+
+  DEV_WINDOW_COVERING_ACTION_REQ = 59;
+}
+
+enum gwAddressType_t
+{
+  UNICAST = 0;   // Single device (64 bit IEEE address)
+  GROUPCAST = 1;   // Group ID (uint16)
+  BROADCAST = 2;   // Broadcast address (uint16)
+  NONE = 3;   // Self addressing, no address specified
+}
+
+enum gwDeviceStatus_t
+{
+  DEVICE_OFFLINE = 0;   // non-responding to service discovery
+  DEVICE_ONLINE = 1; 
+  DEVICE_REMOVED = 2;
+  NOT_APPLICABLE = 255; // returned when requesting information about local gateway device
+}
+
+enum gwZclAttributeDataTypes_t
+{
+  ZCL_DATATYPE_NO_DATA = 0x00;
+  ZCL_DATATYPE_DATA8 = 0x08;
+  ZCL_DATATYPE_DATA16 = 0x09;
+  ZCL_DATATYPE_DATA24 = 0x0a;
+  ZCL_DATATYPE_DATA32 = 0x0b;
+  ZCL_DATATYPE_DATA40 = 0x0c;
+  ZCL_DATATYPE_DATA48 = 0x0d;
+  ZCL_DATATYPE_DATA56 = 0x0e;
+  ZCL_DATATYPE_DATA64 = 0x0f;
+  ZCL_DATATYPE_BOOLEAN = 0x10;
+  ZCL_DATATYPE_BITMAP8 = 0x18;
+  ZCL_DATATYPE_BITMAP16 = 0x19;
+  ZCL_DATATYPE_BITMAP24 = 0x1a;
+  ZCL_DATATYPE_BITMAP32 = 0x1b;
+  ZCL_DATATYPE_BITMAP40 = 0x1c;
+  ZCL_DATATYPE_BITMAP48 = 0x1d;
+  ZCL_DATATYPE_BITMAP56 = 0x1e;
+  ZCL_DATATYPE_BITMAP64 = 0x1f;
+  ZCL_DATATYPE_UINT8 = 0x20;
+  ZCL_DATATYPE_UINT16 = 0x21;
+  ZCL_DATATYPE_UINT24 = 0x22;
+  ZCL_DATATYPE_UINT32 = 0x23;
+  ZCL_DATATYPE_UINT40 = 0x24;
+  ZCL_DATATYPE_UINT48 = 0x25;
+  ZCL_DATATYPE_UINT56 = 0x26;
+  ZCL_DATATYPE_UINT64 = 0x27;
+  ZCL_DATATYPE_INT8 = 0x28;
+  ZCL_DATATYPE_INT16 = 0x29;
+  ZCL_DATATYPE_INT24 = 0x2a;
+  ZCL_DATATYPE_INT32 = 0x2b;
+  ZCL_DATATYPE_INT40 = 0x2c;
+  ZCL_DATATYPE_INT48 = 0x2d;
+  ZCL_DATATYPE_INT56 = 0x2e;
+  ZCL_DATATYPE_INT64 = 0x2f;
+  ZCL_DATATYPE_ENUM8 = 0x30;
+  ZCL_DATATYPE_ENUM16 = 0x31;
+  ZCL_DATATYPE_SEMI_PREC = 0x38;
+  ZCL_DATATYPE_SINGLE_PREC = 0x39;
+  ZCL_DATATYPE_DOUBLE_PREC = 0x3a;
+  ZCL_DATATYPE_OCTET_STR = 0x41;
+  ZCL_DATATYPE_CHAR_STR = 0x42;
+  ZCL_DATATYPE_LONG_OCTET_STR = 0x43;
+  ZCL_DATATYPE_LONG_CHAR_STR = 0x44;
+  ZCL_DATATYPE_ARRAY = 0x48;
+  ZCL_DATATYPE_STRUCT = 0x4c;
+  ZCL_DATATYPE_SET = 0x50;
+  ZCL_DATATYPE_BAG = 0x51;
+  ZCL_DATATYPE_TOD = 0xe0;
+  ZCL_DATATYPE_DATE = 0xe1;
+  ZCL_DATATYPE_UTC = 0xe2;
+  ZCL_DATATYPE_CLUSTER_ID = 0xe8;
+  ZCL_DATATYPE_ATTR_ID = 0xe9;
+  ZCL_DATATYPE_BAC_OID = 0xea;
+  ZCL_DATATYPE_IEEE_ADDR = 0xf0;
+  ZCL_DATATYPE_128_BIT_SEC_KEY = 0xf1;
+  ZCL_DATATYPE_UNKNOWN = 0xff;
+}
+
+enum gwQualityOfService_t
+{
+  APS_NOT_ACK = 0;  // APS not acknowledged (best effort)
+  APS_ACK = 1;      // APS acknowledged (highly reliable)
+}
+
+enum gwSecurityOptions_t
+{
+  APS_SECURITY_DISABLED = 0;
+  APS_SECURITY_ENABLED = 1;
+}
+
+enum gwFrameType_t
+{
+  FRAME_VALID_ACCROSS_PROFILE = 0;
+  FRAME_CLUSTER_SPECIFIC = 1;
+}
+
+enum gwMfrSpecificFlag_t
+{
+  NON_MFR_SPECIFIC = 0;
+  MFR_SPECIFIC = 1;
+}
+
+enum gwClientServerDir_t
+{
+  CLIENT_TO_SERVER = 0;
+  SERVER_TO_CLIENT = 1;
+}
+
+enum gwDisableDefaultRsp_t
+{
+  DEFAULT_RSP_ENABLED = 0;    // default response will be returned
+  DEFAULT_RSP_DISABLED = 1;   // default response will not be returned
+}
+
+enum gwStatus_t
+{
+  STATUS_SUCCESS = 0;
+  STATUS_FAILURE = 1;
+  STATUS_BUSY = 2;      // state machine busy, resources unavailable... 
+  STATUS_INVALID_PARAMETER = 3;
+  STATUS_TIMEOUT = 4;
+}
+
+enum gwOnOffState_t
+{
+  OFF_STATE = 0;
+  ON_STATE = 1;
+  TOGGLE_STATE = 2;
+}
+
+enum gwOnOffStateValue_t
+{
+  OFF = 0;
+  ON = 1;
+}
+
+enum gwLockMode_t
+{
+  LOCK_MODE_LOCK = 0;
+  LOCK_MODE_UNLOCK = 1;
+}
+
+enum gwLockState_t
+{
+  LOCK_NOT_FULLY_LOCKED = 0;
+  LOCK_LOCKED = 1;
+  LOCK_UNLOCKED = 2;
+}
+
+enum gwDoorState_t
+{
+  DOOR_OPEN = 0;
+  DOOR_CLOSED = 1;
+  DOOR_JAMMED = 2;
+  DOOR_FORCED_OPEN = 3;
+}
+
+enum gwZoneType_t
+{
+  STANDARD_CIE = 0x0000;        
+  MOTION_SENSOR = 0x000D;        
+  CONTACT_SW = 0x0015;      
+  FIRE_SENSOR = 0x0028;      
+  WATER_SENSOR = 0x002A;        
+  GAS_SENSOR = 0x002B;      
+  PERSONAL_EMERGENCY_DEVICE = 0x002C;                    
+  VIBRATION_MOVEMENT_SENSOR = 0x002D;                    
+  REMOTE_CONTROL = 0x010F;          
+  KEY_FOB = 0x0115;  
+  KEY_PAD = 0x021D;  
+  STANDARD_WARNING_DEVICE = 0x0225;
+  ZONE_UNALLOCATED = 0xFFFF;    // zone is unallocated                  
+}
+
+enum gwEnrollRspCode_t
+{
+  ZONE_ENROLL_SUCCESS = 0x00;
+  ZONE_NOT_SUPPORTED = 0x01;   // zone type not supported
+  ZONE_NOT_PERMITTED = 0x02;   // zone enrollment is not permitted at this time
+  ZONE_ENROLLMENT_FULL = 0x03; // zone enrollment full
+}
+
+enum gwArmMode_t
+{
+  DISARM = 0x00;
+  ARM_DAY_HOME_ZONES_ONLY = 0x01;     // arm day/home zones only
+  ARM_NIGHT_SLEEP_ZONES_ONLY = 0x02;  // arm night/sleep zones only
+  ARM_ALL_ZONES = 0x03;               // arm all zones
+}
+
+enum gwArmModeRsp_t
+{
+  ALL_ZONES_DISARMED = 0x00;
+  ONLY_DAY_HOME_ZONES_ARMED = 0x01;     
+  ONLY_NIGHT_SLEEP_ZONES_ARMED = 0x02;  
+  ALL_ZONES_ARMED = 0x03;        
+}
+
+enum gwEmergencyCondType_t
+{
+  EMERGENCY = 2;  // (general)
+  FIRE = 3;
+  PANIC = 4;
+}
+
+enum gwThermostatSetpointMode_t
+{
+  HEAT_SETPOINT = 0;
+  COOL_SETPOINT = 1;
+  BOTH_SETPOINTS = 2;
+}
+
+enum gwWindowCoveringAction_t
+{
+  WC_UP_OPEN = 0x00;
+  WC_DOWN_CLOSE = 0x01;
+  WC_STOP = 0x02;
+  WC_GO_TO_LIFT_VALUE = 0x04;
+  WC_GO_TO_LIFT_PERCENT = 0x05;
+  WC_GO_TO_TILT_VALUE = 0x07;
+  WC_GO_TO_TILT_PERCENT = 0x08;
+}
+
+enum gwRegisterUnregister_t
+{
+  UNREGISTER_EXISTING_IMAGE = 0;  // following optional arguments shall not be specified
+  REGISTER_NEW_IMAGE = 1;         // register new image, or update the holdExecution state
+}
+
+enum gwExecutionTimingType_t
+{
+  EXECUTE_IMMEDIATELY = 0;
+  EXECUTE_DELAY_IS_SPECIFIED = 1;
+  EXECUTE_TIME_IS_SPECIFIED = 2;
+  HOLD_EXECUTION = 3;
+  NO_CHANGE = 255;     // valid only if the file is already registered
+}
+
+enum gwImageNotification_t
+{
+  DONT_SEND_NOTIFICATION = 0;
+  BROADCAST_NOTIFICATION = 1;
+  UNICAST_NOTIFICATION = 2;   // use supportedDeviceList
+}
+
+enum gwImageUpdateMode_t
+{
+  OTA_DOWNLOAD_ENABLED = 0;
+  NEW_OTA_DOWNLOADS_DISABLE = 1;  // active downloads are not interrupted
+  OTA_DOWNLOAD_DISABLE = 2;       // active downloads are immediately aborted
+}
+
+//----------------------------------------------------------------------------------------------
+// Structures - submessages, these aren't sent as messages but are included within other messages
+//----------------------------------------------------------------------------------------------
+
+message gwAddressStruct_t
+{
+  // Depending on gwAddressType_t, one of shortAddr or extAddr should be used
+  required gwAddressType_t addressType = 1; // Address Mode
+  optional fixed64 ieeeAddr = 2;            // extended address
+  optional uint32 groupAddr = 3;            // (uint16)
+  optional uint32 broadcastAddr = 4;        // (uint16)
+  optional uint32 endpointId = 5;           // (uint8)
+}
+
+message gwAttributeRecord_t
+{
+  required uint32 attributeId = 1;                  // (uint16) Attribute ID
+  required gwZclAttributeDataTypes_t attributeType = 2;  // Attribute data type
+  required bytes attributeValue = 3;                // array of (uint8) attribute data, using attrType
+}
+
+message gwAttributeReport_t
+{
+  required uint32 attributeId = 1;                      // (uint16)
+  required gwZclAttributeDataTypes_t attributeType = 2; // (uint8) attribute data type
+  required uint32 minReportInterval = 3;                // (uint16) minimum interval between issuing reports (in seconds)
+  required uint32 maxReportInterval = 4;                // (uint16) maximum interval between issuing reports (in seconds)
+  optional uint32 reportableChange = 5;                 // minimum change to analog attributes before issuing reports; size
+                                                        // depends on attribute data type; omitted for discrete data types
+}
+
+message gwAttributeReportConfig_t
+{
+  required gwStatus_t status = 1;
+  required uint32 attributeId = 2;     // (uint16)
+}
+
+message gwAttributeWriteStatus_t
+{
+  required uint32 status = 1;       // (uint8) failure type
+  required uint32 attributeId = 2;  // (uint16) failed attribute ID
+}
+
+message gwClusterList_t
+{
+  required uint32 clusterId = 1;      // (uint16)
+  repeated uint32 attributeList = 2;  // array of (uint16) attributes, using attributeCount
+}
+
+//-----------------------------------------
+// Generic API Set
+//-----------------------------------------
+
+// ZIGBEE_GENERIC_CNF
+message GwZigbeeGenericCnf
+{
+  // ZIGBEE_GENERIC_CNF - command ID used to identify this message
+  // Generic Confirmation - This message is called by the gateway application
+  // to notify about the status of a command that was sent by the application.
+  // No specific response message
+
+  required gwCmdId_t cmdId = 1 [default = ZIGBEE_GENERIC_CNF];  // don't change this field
+  required gwStatus_t status = 2;
+  optional uint32 sequenceNumber = 3;    // (uint16) transaction sequence number
+}
+
+// ZIGBEE_GENERIC_RSP_IND
+
+message GwZigbeeGenericRspInd
+{
+  // ZIGBEE_GENERIC_RSP_IND - command ID used to identify this message
+  // Generic Response Indication - This message is called by the gateway application
+  // to notify the application about the status of a command sent by the application.
+  // No specific response message
+
+  required gwCmdId_t cmdId = 1 [default = ZIGBEE_GENERIC_RSP_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;    // (uint16) transaction sequence number
+  required gwStatus_t status = 3;
+}
+
+//-----------------------------------------
+// Groups and Scenes API Set
+//-----------------------------------------
+
+// GW_ADD_GROUP_REQ
+
+message GwAddGroupReq
+{
+  // GW_ADD_GROUP_REQ - command ID used to identify this message
+  // Add Group Request - This message is called by the gateway application to add a specific device to a
+  // group, or add an existing group of devices to another group, generating an Add Group OTA command.
+  // Returns no specific response.
+
+  required gwCmdId_t cmdId = 1 [default = GW_ADD_GROUP_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;
+  required uint32 groupId = 3;        // (uint16) group ID value
+  required string groupName = 4;
+}
+
+
+// GW_GET_GROUP_MEMBERSHIP_REQ
+
+message GwGetGroupMembershipReq
+{
+  // GW_GET_GROUP_MEMBERSHIP_REQ - command ID used to identify this message
+  // Get Group Membership Request - This message is called by the gateway application to get the list of groups
+  // which a remote device belongs to.
+  // Returns GwGetGroupMembershipRspInd
+
+  required gwCmdId_t cmdId = 1 [default = GW_GET_GROUP_MEMBERSHIP_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2; // address of the target device
+}
+
+// GW_GET_GROUP_MEMBERSHIP_RSP_IND
+
+message GwGetGroupMembershipRspInd
+{
+  // GW_GET_GROUP_MEMBERSHIP_RSP_IND - command ID used to identify this message
+  // Get Group Membership Response Indication - This message is called by the gateway sub-system to report the groups
+  // that the requested remote device belongs to and the remaining capacity for additional groups.
+  // Response to GwGetGroupMembershipReq
+
+  required gwCmdId_t cmdId = 1 [default = GW_GET_GROUP_MEMBERSHIP_RSP_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;       // (uint16) transaction sequence number
+  required gwStatus_t status = 3;
+  required gwAddressStruct_t srcAddress = 4;   // address of device in question
+  required uint32 capacity = 5;             // (uint8) remaining capacity
+  repeated uint32 groupList = 6;            // array of (uint16) group list
+ }
+
+// GW_REMOVE_FROM_GROUP_REQ
+
+message GwRemoveFromGroupReq
+{
+  // GW_REMOVE_FROM_GROUP_REQ - command ID used to identify this message
+  // Remove From Group Request - This message is called by the gateway application to request the device or group
+  // of devices to remove their membership to a particular group or all groups. When a group is removed, scenes
+  // associated with that group shall be removed as well.
+  // Returns no specific response.
+
+  required gwCmdId_t cmdId = 1 [default = GW_REMOVE_FROM_GROUP_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;   // address of the device in question
+  optional uint32 groupId = 3;              // (uint16) group ID value. If omitted, all group memberships
+                                            // will be removed from the destination device(s).
+}
+
+// GW_STORE_SCENE_REQ
+
+message GwStoreSceneReq
+{
+  // GW_STORE_SCENE_REQ - command ID used to identify this message
+  // Store Scene Request - This command is called by the gateway application to store a scene to a group.
+  // It is recommended that this is only used in groupcast mode to store a scene to the entire group 
+  // that it applies to, rather than individual devices.
+  // Returns no specific response.
+
+  required gwCmdId_t cmdId = 1 [default = GW_STORE_SCENE_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;
+  required uint32 groupId = 3;              // (uint16) group ID value
+  required uint32 sceneId = 4;              // (uint8) scene ID value
+}
+
+// GW_REMOVE_SCENE_REQ
+
+message GwRemoveSceneReq
+{
+  // GW_REMOVE_SCENE_REQ - command ID used to identify this message
+  // Remove Scene Request - This command is called by the gateway application to remove a scene from a group.
+  // Returns no specific response.
+
+  required gwCmdId_t cmdId = 1 [default = GW_REMOVE_SCENE_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;
+  required uint32 groupId = 3;              // (uint16) group ID value
+  required uint32 sceneId = 4;              // (uint8) scene ID value
+}
+
+// GW_RECALL_SCENE_REQ
+
+message GwRecallSceneReq
+{
+  // GW_RECALL_SCENE_REQ - command ID used to identify this message
+  // Recall Scene Request - This command is called by the gateway application to recall a scene from a group.
+  // No specific response message
+
+  required gwCmdId_t cmdId = 1 [default = GW_RECALL_SCENE_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;
+  required uint32 groupId = 3;              // (uint16) group ID value
+  required uint32 sceneId = 4;              // (uint8) scene ID value
+}
+
+// GW_GET_SCENE_MEMBERSHIP_REQ
+
+message GwGetSceneMembershipReq
+{
+  // GW_GET_SCENE_MEMBERSHIP_REQ - command ID used to identify this message
+  // Get Scene Membership Request - This command is called by the gateway application to get the list of scenes
+  // which a remote device belongs to.
+  // Returns GwGetSceneMembershipRspInd
+
+  required gwCmdId_t cmdId = 1 [default = GW_GET_SCENE_MEMBERSHIP_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;
+  required uint32 groupId = 3;              // (uint16) group ID value
+}
+
+// GW_GET_SCENE_MEMBERSHIP_RSP_IND
+
+message GwGetSceneMembershipRspInd
+{
+  // GW_GET_SCENE_MEMBERSHIP_RSP_IND - command ID used to identify this message
+  // Get Scene Membership Response Indication - This command is called by the gateway sub-system to report the scenes
+  // that the requested remote device/group of devices have in their scene table associated with a certain group ID.
+  // Response to GwGetSceneMembershipReq
+
+  required gwCmdId_t cmdId = 1 [default = GW_GET_SCENE_MEMBERSHIP_RSP_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;     // (uint16) transaction sequence number
+  required gwStatus_t status = 3;
+  required gwAddressStruct_t srcAddress = 4;
+  required uint32 capacity = 5;           // (uint8) remaining capacity
+  required uint32 groupId = 6;            // (uint16) group ID value
+  required bytes sceneList = 7;           // array of (uint8) including the scene list
+}
+
+//-----------------------------------------
+// Poll Control API set
+//-----------------------------------------
+
+// GW_SLEEPY_DEVICE_PACKET_PENDING_REQ
+
+message GwSleepyDevicePacketPendingReq
+{
+  // GW_SLEEPY_DEVICE_PACKET_PENDING_REQ - command ID used to identify this message
+  // Sleepy Device Packet Pending Request - This command is called by the gateway application to notify the gateway
+  // sub-system about a packet that needs to be sent to a sleepy end device.
+  // Returns no specific message
+
+  required gwCmdId_t cmdId = 1 [default = GW_SLEEPY_DEVICE_PACKET_PENDING_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;
+}
+
+// GW_SLEEPY_DEVICE_CHECK_IN_IND
+
+message GwSleepyDeviceCheckInInd
+{
+  // GW_SLEEPY_DEVICE_CHECK_IN_IND - command ID used to identify this message
+  // Sleepy Device Check-In Indication - This command is called by the gateway sub-system to notify the application
+  // that an end device is currently listening for incoming commands.
+  // Returns no specific message
+
+  required gwCmdId_t cmdId = 1 [default = GW_SLEEPY_DEVICE_CHECK_IN_IND];  // don't change this field
+  required gwAddressStruct_t srcAddress = 2;     // the address of the device in question
+}
+
+//-----------------------------------------
+// Generic Foundation Layer API set
+//-----------------------------------------
+
+// GW_ATTRIBUTE_CHANGE_IND
+
+message GwAttributeChangeInd
+{
+  // GW_ATTRIBUTE_CHANGE_IND - command ID used to identify this message
+  // Attribute Change Indication - This message is called by the gateway sub-system
+  // to notify the app that an attribute has been modified by a remote node in the ZigBee network.
+  // No specific response message
+
+  required gwCmdId_t cmdId = 1 [default = GW_ATTRIBUTE_CHANGE_IND];  // don't change this field
+  required uint32 endpointId = 2;           // (uint8) local endpoint
+  required uint32 clusterId = 3;            // (uint16) cluster ID belonging to attribute
+  required uint32 attributeId = 4;          // (uint16) attribute that is being changed
+  required gwZclAttributeDataTypes_t attributeType = 5;   // (uint8) data type of the attribute requested
+  required bytes attributeValue = 6;        // (uint8) array of attribute data, using attrType
+}
+
+// GW_GET_DEVICE_ATTRIBUTE_LIST_REQ
+
+message GwGetDeviceAttributeListReq
+{
+  // GW_GET_DEVICE_ATTRIBUTE_LIST_REQ - command ID used to identify this message
+  // Get Device Attribute List Request - This message is called by the gateway app to retrieve
+  // the list of attributes registered by the gateway sub-system for a given endpoint or the list
+  // of attributes of a remote device's endpoint.
+  // Returns GwGetDeviceAttributeListRspInd
+
+  required gwCmdId_t cmdId = 1 [default = GW_GET_DEVICE_ATTRIBUTE_LIST_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;  // {U/S,E}
+}
+
+// GW_GET_DEVICE_ATTRIBUTE_LIST_RSP_IND
+
+message GwGetDeviceAttributeListRspInd
+{
+  // GW_GET_DEVICE_ATTRIBUTE_LIST_RSP_IND - command ID used to identify this message
+  // Get Device Attribute List Indication Response - This message is called by the gateway sub-system to report 
+  // the list of attributes registered with the gateway sub-system or a remote device.
+  // Response to GwGetDeviceAttributeListReq
+
+  required gwCmdId_t cmdId = 1 [default = GW_GET_DEVICE_ATTRIBUTE_LIST_RSP_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;             // (uint16) transaction sequence number
+  required gwStatus_t status = 3;
+  required gwAddressStruct_t srcAddress = 4;      // {U/S}
+  repeated gwClusterList_t clusterList = 5;       // array that holds cluster list table, using clusterCount
+}
+
+// GW_READ_DEVICE_ATTRIBUTE_REQ
+
+message GwReadDeviceAttributeReq
+{
+  // GW_READ_DEVICE_ATTRIBUTE_REQ - command ID used to identify this message
+  // Read Device Attribute Request - This message is called by the gateway app for reading one or more 
+  // attributes belonging to a specific cluster of a remote node.
+  // Returns GwReadDeviceAttributeRspInd
+
+  required gwCmdId_t cmdId = 1 [default = GW_READ_DEVICE_ATTRIBUTE_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;    // {U/G/B/S,E}
+  required uint32 clusterId = 3;                // (uint16) ID of the cluster which the attribute belongs to
+  repeated uint32 attributeList = 4;            // array of (uint16) holding attribute IDs, using attrListNum
+}
+
+// GW_READ_DEVICE_ATTRIBUTE_RSP_IND
+
+message GwReadDeviceAttributeRspInd
+{
+  // GW_READ_DEVICE_ATTRIBUTE_RSP_IND - command ID used to identify this message
+  // Read Device Attribute Response Indication - This message is called by the gateway sub-system to report
+  // the attribute read of a specific cluster from a remote node or in response to a query for a local
+  // attribute read request.
+  // Response to GwReadDeviceAttributeReq
+
+  required gwCmdId_t cmdId = 1 [default = GW_READ_DEVICE_ATTRIBUTE_RSP_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;           // (uint16) transaction sequence number
+  required gwStatus_t status = 3;
+  required gwAddressStruct_t srcAddress = 4;    // {U/S,E} network address of remote device, 0 if local device
+  required uint32 clusterId = 5;                // cluster ID of attribute record
+  repeated gwAttributeRecord_t attributeRecordList = 6; // attribute array, using attrRecordNum
+}
+
+// GW_WRITE_DEVICE_ATTRIBUTE_REQ
+
+message GwWriteDeviceAttributeReq
+{
+  // GW_WRITE_DEVICE_ATTRIBUTE_REQ - command ID used to identify this message
+  // Read Device Attribute Request - This message is called by the gateway app for write to one or more 
+  // attributes belonging to a specific cluster of a remote node or local gateway device.
+  // Returns GwWriteDeviceAttributeRspInd
+
+  required gwCmdId_t cmdId = 1 [default = GW_WRITE_DEVICE_ATTRIBUTE_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;    // {U/G/B/S,E}
+  required uint32 clusterId = 3;                // (uint16) ID of the cluster which the attribute belongs to
+  repeated gwAttributeRecord_t attributeRecordList = 4;     // attribute array, using attributeRecordCount
+}
+
+// GW_WRITE_DEVICE_ATTRIBUTE_RSP_IND
+
+message GwWriteDeviceAttributeRspInd
+{
+  // GW_WRITE_DEVICE_ATTRIBUTE_RSP_IND - command ID used to identify this message
+  // Write Device Attribute Response Indication - This message is called by the gateway sub-system 
+  // when it wants to report the status of writing to a generic cluster specific attribute on a 
+  // local or remote node.
+  // Response to GwWriteDeviceAttributeReq
+
+  required gwCmdId_t cmdId = 1 [default = GW_WRITE_DEVICE_ATTRIBUTE_RSP_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;         // (uint16) transaction sequence number
+  required gwStatus_t status = 3;
+  required gwAddressStruct_t srcAddress = 4;  // {U/S,E}
+  required uint32 clusterId = 5;              // (uint16) attribute cluster ID
+  repeated gwAttributeWriteStatus_t attributeWriteErrorList = 6; // array of failed write attributes, using attributeWriteErrorCount
+}
+
+// GW_SET_ATTRIBUTE_REPORTING_REQ
+
+message GwSetAttributeReportingReq
+{
+  // GW_SET_ATTRIBUTE_REPORTING_REQ - command ID used to identify this message
+  // Set Attribute Reporting Request - This message is called by the gateway app to configure reporting 
+  // of specific cluster attributes.
+  // Returns GwSetAttributeReportingRspInd
+
+  required gwCmdId_t cmdId = 1 [default = GW_SET_ATTRIBUTE_REPORTING_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;  // {U/G/B,E}
+  required uint32 clusterId = 3;              // (uint16) cluster ID of the attribute(s)
+  repeated gwAttributeReport_t attributeReportList = 4;  // array of reporting attribute IDs, using attributeReportCount  
+}
+
+// GW_SET_ATTRIBUTE_REPORTING_RSP_IND
+
+message GwSetAttributeReportingRspInd
+{
+  // GW_SET_ATTRIBUTE_REPORTING_RSP_IND - command ID used to identify this message
+  // Set Attribute Reporting Response Indication - This message is called by the gateway sub-system
+  // in response to configuring attribute reporting, notifying the gateway app.
+  // Response to GwSetAttributeReportingReq
+
+  required gwCmdId_t cmdId = 1 [default = GW_SET_ATTRIBUTE_REPORTING_RSP_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;         // (uint16) transaction sequence number
+  required gwStatus_t status = 3;
+  required gwAddressStruct_t srcAddress = 4;  // {U,E}
+  required uint32 clusterId = 5;              // (uint16)
+  repeated gwAttributeReportConfig_t attributeReportConfigList = 6;  // array of reportable attributes, using attrReportConfigNum
+}
+
+// GW_ATTRIBUTE_REPORTING_IND
+
+message GwAttributeReportingInd
+{
+  // GW_ATTRIBUTE_REPORTING_IND - command ID used to identify this message
+  // Attribute Reporting Indication - This message is called by the gateway sub-system when 
+  // reporting a specific attribute to the gateway application.
+  // No specific response message
+
+  required gwCmdId_t cmdId = 1 [default = GW_ATTRIBUTE_REPORTING_IND];  // don't change this field
+  required gwStatus_t status = 2;
+  required gwAddressStruct_t srcAddress = 3;    // address of the responding device
+  required uint32 clusterId = 4;                // (uint16) cluster ID of reporting attribute
+  repeated gwAttributeRecord_t attributeRecordList = 5; // array of attribute records, using attributeRecordCount
+}
+
+// GW_SEND_ZCL_FRAME_REQ
+
+message GwSendZclFrameReq
+{
+  // GW_SEND_ZCL_FRAME_REQ - command ID used to identify this message
+  // Send ZCL Frame Request - This message is called by the gateway application when it intends
+  // to send a raw ZCL frame over the air.
+  // No specific response message
+
+  required gwCmdId_t cmdId = 1 [default = GW_SEND_ZCL_FRAME_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;        // {U/G,e}
+  required uint32 endpointIdSource = 3;             // (uint8) source endpoint ID
+  required uint32 profileId = 4;                    // (uint16)
+  required gwQualityOfService_t qualityOfService = 5;
+  required gwSecurityOptions_t securityOptions = 6;
+  required uint32 clusterId = 7;                    // (uint16)
+  required gwFrameType_t frameType = 8;
+  required gwMfrSpecificFlag_t manufacturerSpecificFlag = 9;
+  optional uint32 manufacturerCode = 10;            // (uint16) omitted if not manufacturer specific
+  required gwClientServerDir_t clientServerDirection = 11;
+  required gwDisableDefaultRsp_t disableDefaultRsp = 12;
+  optional uint32 sequenceNumber = 13;              // (uint16) if omitted, a new sequence number will be assigned internally
+  required uint32 commandId = 14;                   // (uint8)
+  required bytes payload = 15;                      // array of (uint8) containing ZCL payload, using payloadSize
+}
+
+// GW_ZCL_FRAME_RECEIVE_IND
+
+message GwZclFrameReceiveInd
+{
+  // GW_ZCL_FRAME_RECEIVE_IND - command ID used to identify this message
+  // ZCL Frame Receive Indication - This message is called by the gateway sub-system to notify
+  // that an unprocessed ZCL frame has been received.
+  // No specific response message
+
+  required gwCmdId_t cmdId = 1 [default = GW_ZCL_FRAME_RECEIVE_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;           // (uint16) cluster sequence number, same as one used for default response
+  required gwAddressStruct_t srcAddress = 3;    // {U,E} source address
+  required uint32 profileId = 4;                // (uint16)
+  required uint32 endpointIdDest = 5;           // (uint8) destination endpoint ID
+  required uint32 clusterId = 6;                // (uint16)
+  required gwFrameType_t frameType = 7;
+  required gwMfrSpecificFlag_t manufacturerSpecificFlag = 8;
+  optional uint32 manufacturerCode = 9;         // (uint16) omitted if manufacturerSpecificFlag is set to 0, otherwise manufacturer ID
+  required gwClientServerDir_t clientServerDirection = 10;
+  required gwDisableDefaultRsp_t disableDefaultRsp = 11;
+  required uint32 commandId = 12;               // (uint8)
+  required bytes payload = 13;                  // array of (uint8) containing ZCL payload, using payloadSize
+}
+
+//-------------------------------------------
+// Alarm API set
+//-------------------------------------------
+
+// GW_ALARM_IND
+
+message GwAlarmInd
+{
+  // GW_ALARM_IND - command ID used to identify this message
+  // Alarm Indication - This message is sent by the gateway sub-system to indicate to the app
+  // that a cluster specific alarm on a remote device has been generated.
+  // No specific response message
+
+  required gwCmdId_t cmdId = 1 [default = GW_ALARM_IND];  // don't change this field
+  required gwAddressStruct_t srcAddress = 2;
+  required uint32 alarmCode = 3;                // (uint8) cluster specific alarm code      
+  required uint32 clusterId = 4;                // (uint16)
+}
+
+// GW_ALARM_RESET_REQ
+
+message GwAlarmResetReq
+{
+  // GW_ALARM_RESET_REQ - command ID used to identify this message
+  // Alarm Reset Request - This message is called by the application to request a remote node
+  // to reset a specific alarm or all alarms.
+  // No specific response message
+
+  required gwCmdId_t cmdId = 1 [default = GW_ALARM_RESET_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;
+  optional uint32 alarmCode = 3;                // (uint8) cluster specific alarm code, all alarms reset if not specified      
+  optional uint32 clusterId = 4;                // (uint16) required if alarmCode is specified
+}
+
+//-------------------------------------------
+// IAS Zone Device API set
+//-------------------------------------------
+
+// DEV_ZONE_ENROLLMENT_REQ_IND
+
+message DevZoneEnrollmentReqInd
+{
+  // DEV_ZONE_ENROLLMENT_REQ_IND - command ID used to identify this message
+  // Zone Enrollment Request Indication - This message is sent by the gateway sub-system to indicate to the app
+  // that an alarm enrollment has been received.
+  // Returns DevZoneEnrollmentRsp
+
+  required gwCmdId_t cmdId = 1 [default = DEV_ZONE_ENROLLMENT_REQ_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;           // (uint16) transaction sequence number
+  required gwAddressStruct_t srcAddress = 3;    // address of originating device
+  required uint32 manufacturerCode = 4;
+  required gwZoneType_t zoneType = 5; 
+}
+
+// DEV_ZONE_ENROLLMENT_RSP
+
+message DevZoneEnrollmentRsp
+{
+  // DEV_ZONE_ENROLLMENT_RSP - command ID used to identify this message
+  // Zone Enrollment Response - This message is called by the gateway application to send a response
+  // to an enrollment request.
+  // Response to DevZoneEnrollmentReqInd
+
+  required gwCmdId_t cmdId = 1 [default = DEV_ZONE_ENROLLMENT_RSP];  // don't change this field
+  required uint32 sequenceNumber = 2;           // (uint16) transaction sequence number
+  required gwAddressStruct_t dstAddress = 3;    // address of originating device
+  required gwEnrollRspCode_t enrollmentResponseCode = 4; 
+  required uint32 zoneId = 5;                   // unique alarm device ID for reference upon enrollment
+}
+
+// DEV_ZONE_STATUS_CHANGE_IND
+
+message DevZoneStatusChangeInd
+{
+  // DEV_ZONE_STATUS_CHANGE_IND - command ID used to identify this message
+  // Zone Status Change Indication - This message is called by the gateway sub-system to indicate to the 
+  // application that the value of a ZoneStatus attribute has changed.
+  // Returns no specific response
+
+  required gwCmdId_t cmdId = 1 [default = DEV_ZONE_STATUS_CHANGE_IND];  // don't change this field
+  required gwAddressStruct_t srcAddress = 2;    // address of device generating alarm
+  required uint32 zoneStatus = 3;               // (uint16) current value of the zoneStatus attribute
+  required uint32 extendedStatus = 4;           // (uint8)
+}
+
+//-------------------------------------------
+// IAS ACE Device API set
+//-------------------------------------------
+
+// DEV_ACE_ARM_REQ_IND
+
+message DevAceArmReqInd
+{
+  // DEV_ACE_ARM_REQ_IND - command ID used to identify this message
+  // ACE Arm Request Indication - This message is called by the gateway sub-system to indicate to the 
+  // application that a remote ACE device has sent an arm request.
+  // Application responds with DevAceArmRsp
+
+  required gwCmdId_t cmdId = 1 [default = DEV_ACE_ARM_REQ_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;          // (uint16) transaction sequence number
+  required gwAddressStruct_t srcAddress = 3;   // address of originating device
+  required gwArmMode_t armMode = 4;
+}
+
+// DEV_ACE_ARM_RSP
+
+message DevAceArmRsp
+{
+  // DEV_ACE_ARM_RSP - command ID used to identify this message
+  // ACE Arm Response - This message is called by the gateway application to send a response to an
+  // ACE device that sent an arm request.
+  // No specific response message
+
+  required gwCmdId_t cmdId = 1 [default = DEV_ACE_ARM_RSP];  // don't change this field
+  required uint32 sequenceNumber = 2;          // (uint16) transaction sequence number
+  required gwAddressStruct_t dstAddress = 3;   // address of originating device
+  required gwArmModeRsp_t armResponse = 4;
+}
+
+// DEV_ACE_BYPASS_IND
+
+message DevAceBypassInd
+{
+  // DEV_ACE_BYPASS_IND - command ID used to identify this message
+  // ACE Bypass Indication - This message is called by the gateway sub-system to indicate to the application
+  // that a remote ACE device has sent a bypass indication.
+  // No specific response message
+
+  required gwCmdId_t cmdId = 1 [default = DEV_ACE_BYPASS_IND];  // don't change this field
+  required gwAddressStruct_t srcAddress = 2;    // address of originating device
+  required bytes zoneIdList = 3;                // array of (uint8) Zone ID, based on zoneCount
+}
+
+// DEV_ACE_EMERGENCY_CONDITION_IND
+
+message DevAceEmergencyConditionInd
+{
+  // DEV_ACE_EMERGENCY_CONDITION_IND - command ID used to identify this message
+  // ACE Emergency Condition Indication - This message is called by the gateway sub-system to indicate to the
+  // gateway application that a remote ACE device has sent an emergency condition indication.
+  // No specific response message
+
+  required gwCmdId_t cmdId = 1 [default = DEV_ACE_EMERGENCY_CONDITION_IND];  // don't change this field
+  required gwAddressStruct_t srcAddress = 2;   // address of originating device
+  required gwEmergencyCondType_t emergencyConditionType = 3;
+}
+
+// DEV_ACE_GET_ZONE_ID_MAP_REQ_IND
+
+message DevAceGetZoneIdMapReqInd
+{
+  // DEV_ACE_GET_ZONE_ID_MAP_REQ_IND - command ID used to identify this message
+  // ACE Get Zone ID Map Request Indication - This message is called by the gateway sub-system to indicate to the
+  // gateway application that a remote ACE device has sent a zone ID map request.
+  // Application responds with DevAceGetZoneIdMapRsp
+
+  required gwCmdId_t cmdId = 1 [default = DEV_ACE_GET_ZONE_ID_MAP_REQ_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;          // (uint16) transaction sequence number
+  required gwAddressStruct_t srcAddress = 3;   // address of originating device
+}
+
+// DEV_ACE_GET_ZONE_ID_MAP_RSP
+
+message DevAceGetZoneIdMapRsp
+{
+  // DEV_ACE_GET_ZONE_ID_MAP_RSP - command ID used to identify this message
+  // ACE Get Zone ID Map Response - This message is called by the gateway application to send a response 
+  // to a zone ID map request.
+  // No specific response message
+
+  required gwCmdId_t cmdId = 1 [default = DEV_ACE_GET_ZONE_ID_MAP_RSP];  // don't change this field
+  required uint32 sequenceNumber = 2;           // (uint16) transaction sequence number
+  required gwAddressStruct_t dstAddress = 3;    // address of originating device
+  repeated uint32 zoneIdMapSection = 4;         // array of (uint16). If bit n of Zone ID Map section N is 
+                                                // set to 1, then Zone ID (16 x N + n) is allocated, else it 
+                                                // is not allocated.
+}
+
+// DEV_ACE_GET_ZONE_INFORMATION_REQ_IND
+
+message DevAceGetZoneInformationReqInd
+{
+  // DEV_ACE_GET_ZONE_INFORMATION_REQ_IND - command ID used to identify this message
+  // ACE Get Zone Information Request Indication - This message is called by the gateway sub-system to indicate
+  // to the gateway application that a remote ACE device has sent a zone information request.
+  // Application responds with DevAceGetZoneInformationRsp
+
+  required gwCmdId_t cmdId = 1 [default = DEV_ACE_GET_ZONE_INFORMATION_REQ_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;           // (uint16) transaction sequence number
+  required gwAddressStruct_t srcAddress = 3;    // address of originating device
+  required uint32 zoneId = 4;                   // (uint8) index of requested zone
+}
+
+// DEV_ACE_GET_ZONE_INFORMATION_RSP
+
+message DevAceGetZoneInformationRsp
+{
+  // DEV_ACE_GET_ZONE_INFORMATION_RSP - command ID used to identify this message
+  // ACE Get Zone Information Response - This message is called by the gateway application to send a response
+  // to a zone ID map request.
+  // No specific response message
+
+  required gwCmdId_t cmdId = 1 [default = DEV_ACE_GET_ZONE_INFORMATION_RSP];  // don't change this field
+  required uint32 sequenceNumber = 2;           // (uint16) transaction sequence number
+  required gwAddressStruct_t dstAddress = 3;    // address of originating device
+  required uint32 zoneId = 4;                   // (uint8) index of requested zone
+  required gwZoneType_t zoneType = 5;
+  required fixed64 ieeeAddress = 6;             // IEEE address of the respective zone-device, or 0xFFFFF... if unallocated
+}
+
+//-------------------------------------------
+// Switchable/Dimmable/Identify Device Control API set
+//-------------------------------------------
+
+// DEV_SET_IDENTIFY_MODE_REQ
+
+message DevSetIdentifyModeReq
+{
+  // DEV_SET_IDENTIFY_MODE_REQ - command ID used to identify this message
+  // Set Identify Mode Request - This message is called by the gateway application to start/stop the "Identify"
+  // mode of the target device.
+  // Returns no specific response
+
+  required gwCmdId_t cmdId = 1 [default = DEV_SET_IDENTIFY_MODE_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;    // Destination address
+  required uint32 identifyTime = 3;             // (uint16) time in seconds to be in identify mode.
+                                                // 0 = stop identify, 0 < = continue identifying for 
+                                                // identifyTime seconds.     
+}
+
+// DEV_SET_ONOFF_STATE_REQ
+
+message DevSetOnOffStateReq
+{
+  // DEV_SET_ONOFF_STATE_REQ - command ID used to identify this message
+  // Set OnOff State Request - This message is called by the gateway application when it wants to send an
+  // on/off command to a device in the network.
+  // Returns no specific response
+
+  required gwCmdId_t cmdId = 1 [default = DEV_SET_ONOFF_STATE_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;          // Destination address
+  required gwOnOffState_t state = 3;
+}
+
+// DEV_SET_LEVEL_REQ
+
+message DevSetLevelReq
+{
+  // DEV_SET_LEVEL_REQ - command ID used to identify this message
+  // Set Level Request - This message is called by the gateway application when it wants to send a level control
+  // command to a device in the network.
+  // Returns no specific response
+
+  required gwCmdId_t cmdId = 1 [default = DEV_SET_LEVEL_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2; // Destination address
+  required uint32 transitionTime = 3;         // (uint16) Time to tansition to the requested level (100 msec units)
+  required uint32 levelValue = 4;             // (uint8) requested level
+}
+
+// DEV_GET_LEVEL_REQ
+
+message DevGetLevelReq
+{
+  // DEV_GET_LEVEL_REQ - command ID used to identify this message
+  // Get Level Request - This message is called by the gateway application when it wants to know the level
+  // attribute of a node.
+  // Returns DevGetLevelRspInd
+
+  required gwCmdId_t cmdId = 1 [default = DEV_GET_LEVEL_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;          // address of device 
+}
+
+// DEV_GET_LEVEL_RSP_IND
+
+message DevGetLevelRspInd
+{
+  // DEV_GET_LEVEL_RSP_IND - command ID used to identify this message
+  // Get Level Response Indication - This message is called by the gateway sub-system to indicate to the state
+  // of the level attribute of a node.
+  // Response from DevGetLevelReq
+
+  required gwCmdId_t cmdId = 1 [default = DEV_GET_LEVEL_RSP_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;               // (uint16) transaction sequence number
+  required gwStatus_t status = 3;
+  required gwAddressStruct_t srcAddress = 4;
+  required uint32 levelValue = 5;                   // (uint8) requested level value
+}
+
+// DEV_GET_ONOFF_STATE_REQ
+
+message DevGetOnOffStateReq
+{
+  // DEV_GET_ONOFF_STATE_REQ - command ID used to identify this message
+  // Get OnOff State Request - This message is called by the gateway application when it wants to know the on/off
+  // attribute of a node.
+  // Returns DevGetOnOffStateRspInd
+
+  required gwCmdId_t cmdId = 1 [default = DEV_GET_ONOFF_STATE_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;          // Destination address
+}
+
+// DEV_GET_ONOFF_STATE_RSP_IND
+
+message DevGetOnOffStateRspInd
+{
+  // DEV_GET_ONOFF_STATE_RSP_IND - command ID used to identify this message
+  // Get OnOff State Response Indication - This message is called by the gateway sub-system to indicate the state
+  // of the on/off attribute of a node.
+  // Response from DevGetOnOffStateReq
+
+  required gwCmdId_t cmdId = 1 [default = DEV_GET_ONOFF_STATE_RSP_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;            // (uint16) transaction sequence number
+  required gwStatus_t status = 3;
+  required gwAddressStruct_t srcAddress = 4;     // Address of the originating device
+  required gwOnOffStateValue_t stateValue = 5;
+}
+
+//-----------------------------------------
+// Color Control API set
+//-----------------------------------------
+
+// DEV_SET_COLOR_REQ
+
+message DevSetColorReq
+{
+  // DEV_SET_COLOR_REQ - command ID used to identify this message
+  // Set Color Request - This message is called by the gateway application when it wants to send a color command
+  // to a device in the network.
+  // Returns no specific response
+
+  required gwCmdId_t cmdId = 1 [default = DEV_SET_COLOR_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;
+  required uint32 hueValue = 3;            // (uint8) Requested hue value
+  required uint32 saturationValue = 4;     // (uint8) Requested saturation value
+}
+
+// DEV_GET_COLOR_REQ
+
+message DevGetColorReq
+{
+  // DEV_GET_COLOR_REQ - command ID used to identify this message
+  // Get Color Request - This message is called by the gateway application to know the color attribute of a node.
+  // Returns DevGetColorRspInd
+
+  required gwCmdId_t cmdId = 1 [default = DEV_GET_COLOR_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;
+}
+
+// DEV_GET_COLOR_RSP_IND
+
+message DevGetColorRspInd
+{
+  // DEV_GET_COLOR_RSP_IND - command ID used to identify this message
+  // Get Color Response Indication - This message is called by the gateway sub-system to indicate the state
+  // of the color attributes of a node.
+  // Response from DevGetColorReq
+
+  required gwCmdId_t cmdId = 1 [default = DEV_GET_COLOR_RSP_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;             // (uint16) transaction sequence number
+  required gwStatus_t status = 3;
+  required gwAddressStruct_t srcAddress = 4;
+  required uint32 hueValue = 5;                   // (uint8) read hue value
+  required uint32 satValue = 6;                   // (uint8) read saturation value
+}
+
+//-----------------------------------------
+// Measurement Sensing API set
+//-----------------------------------------
+
+// DEV_GET_TEMP_REQ
+
+message DevGetTempReq
+{
+  // DEV_GET_TEMP_REQ - command ID used to identify this message
+  // Get Temperature Request - This message is called by the gateway application to request a read of the
+  // temperature attribute of a remote device.
+  // Returns DevGetTempRspInd
+
+  required gwCmdId_t cmdId = 1 [default = DEV_GET_TEMP_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;          // Destination address
+}
+
+// DEV_GET_TEMP_RSP_IND
+
+message DevGetTempRspInd
+{
+  // DEV_GET_TEMP_RSP_IND - command ID used to identify this message
+  // Get Temperature Response Indication - This command is called by the gateway sub-system to indicate
+  // to the application the read-out of the attribute requested to be read.
+  // Response from DevGetTempReq
+
+  required gwCmdId_t cmdId = 1 [default = DEV_GET_TEMP_RSP_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;           // (uint16) transaction sequence number
+  required gwStatus_t status = 3;
+  required gwAddressStruct_t srcAddress = 4;    // Address of the source device
+  required uint32 temperatureValue = 5;         // (uint16) read temperature value.  The temperature is in Deg C * 100, 
+                                                // Where -273.15°C <= temperature <= 327.67 ºC, corresponding to a 
+                                                // Measured Value in the range 0x954d to 0x7fff. 
+                                                // The maximum resolution this format allows is 0.01 ºC.  
+}
+
+// DEV_GET_POWER_REQ
+
+message DevGetPowerReq
+{
+  // DEV_GET_POWER_REQ - command ID used to identify this message
+  // Get Power Request - This message is called by the gateway application to request a read of the power
+  // readings of a remote device.
+  // Returns DevGetPowerRspInd
+
+  required gwCmdId_t cmdId = 1 [default = DEV_GET_POWER_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;          // Destination address
+}
+
+// DEV_GET_POWER_RSP_IND
+
+message DevGetPowerRspInd
+{
+  // DEV_GET_POWER_RSP_IND - command ID used to identify this message
+  // Get Power Response Indication - This message is called by the gateway sub-system to indicate to the
+  // application the read-out of the attribute requested to be read.
+  // Response from DevGetPowerReq
+
+  required gwCmdId_t cmdId = 1 [default = DEV_GET_POWER_RSP_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;         // (uint16) transaction sequence number
+  required gwStatus_t status = 3;
+  required gwAddressStruct_t srcAddress = 4;  // Address of the source device
+  required uint32 powerValue = 5;              // (uint24) read power value.  The power is in W * 100, 
+                                               // represented by a 24b number (packed into a 32b number 
+                                               // in this message).
+}
+
+// DEV_GET_HUMIDITY_REQ
+
+message DevGetHumidityReq
+{
+  // DEV_GET_HUMIDITY_REQ - command ID used to identify this message
+  // Get Humidity Request - This message is called by the gateway application to request a read of the humidity
+  // readings of a remote device.
+  // Returns DevGetHumidityRspInd
+
+  required gwCmdId_t cmdId = 1 [default = DEV_GET_HUMIDITY_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;          // Destination address
+}
+
+// DEV_GET_HUMIDITY_RSP_IND
+
+message DevGetHumidityRspInd
+{
+  // DEV_GET_HUMIDITY_RSP_IND - command ID used to identify this message
+  // Get Humidity Response Indication - This message is called by the gateway sub-system to indicate to the
+  // gateway application the read-out of the attribute requested to be read.
+  // Response from DevGetHumidityReq
+
+  required gwCmdId_t cmdId = 1 [default = DEV_GET_HUMIDITY_RSP_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;           // (uint16) transaction sequence number
+  required gwStatus_t status = 3;
+  required gwAddressStruct_t srcAddress = 4;    // Address of the source device
+  required uint32 humidityValue = 5;            // (uint8) read humidity value.  The humidity Measured Value 
+                                                // represents the relative humidity in % as follows:- 
+                                                // Measured Value = 100 x Relative humidity, where 
+                                                // 0% <= Relative humidity <= 100%, corresponding to a Measured 
+                                                // Value in the range 0 to 0x2710. 
+                                                // The maximum resolution this format allows is 0.01%
+}
+
+//-----------------------------------------
+// Door Lock API set
+//-----------------------------------------
+
+// DEV_SET_DOOR_LOCK_REQ
+
+message DevSetDoorLockReq
+{
+  // DEV_SET_DOOR_LOCK_REQ - command ID used to identify this message
+  // Set Door Lock Request - This message is called by the gateway application to request a remote device
+  // to lock/unlock the door.
+  // Returns DevSetDoorLockRspInd
+
+  required gwCmdId_t cmdId = 1 [default = DEV_SET_DOOR_LOCK_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;   // Destination address
+  required gwLockMode_t lockMode = 3;       
+  required bytes pinCodeValue = 4;             // array of (uint8) for PIN/RFID code, size pinCodeSize
+}
+
+// DEV_SET_DOOR_LOCK_RSP_IND
+
+message DevSetDoorLockRspInd
+{
+  // DEV_SET_DOOR_LOCK_RSP_IND - command ID used to identify this message
+  // Set Device Door Lock Response Indication - This message is called by the gateway sub-system to indicate to
+  // the gateway application that the door lock/unlock command has been received.
+  // Response to DevSetDoorLockReq
+
+  required gwCmdId_t cmdId = 1 [default = DEV_SET_DOOR_LOCK_RSP_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;           // (uint16) transaction sequence number
+  required gwStatus_t status = 3;
+  required gwAddressStruct_t srcAddress = 4;    // address of device 
+  required gwLockMode_t lockMode = 5;
+}
+
+// DEV_GET_DOOR_LOCK_STATE_REQ
+
+message DevGetDoorLockStateReq
+{
+  // DEV_GET_DOOR_LOCK_STATE_REQ - command ID used to identify this message
+  // Get Door Lock State Request - This message is called by the gateway application to request information
+  // about the state of a lock.
+  // Returns DevGetDoorLockStateRspInd
+
+  required gwCmdId_t cmdId = 1 [default = DEV_GET_DOOR_LOCK_STATE_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;   // Destination address
+}
+
+// DEV_GET_DOOR_LOCK_STATE_RSP_IND
+
+message DevGetDoorLockStateRspInd
+{
+  // DEV_GET_DOOR_LOCK_STATE_RSP_IND - command ID used to identify this message
+  // Get Device Door Lock State Response Indication - This message is called by the gateway sub-system to indicate 
+  // to the gateway application the state of a door lock.
+  // Response to DevGetDoorLockStateReq
+
+  required gwCmdId_t cmdId = 1 [default = DEV_GET_DOOR_LOCK_STATE_RSP_IND];  // don't change this field
+  required uint32 sequenceNumber = 2;           // (uint16) transaction sequence number
+  required gwStatus_t status = 3;
+  required gwAddressStruct_t srcAddress = 4;    // address of device 
+  required gwLockState_t lockState = 5;
+  required gwDoorState_t doorState = 6;
+}
+
+//-----------------------------------------
+// Thermostat API set
+//-----------------------------------------
+
+// DEV_THERMOSTAT_SETPOINT_CHANGE_REQ
+
+message DevThermostatSetpointChangeReq
+{
+  // DEV_THERMOSTAT_SETPOINT_CHANGE_REQ - command ID used to identify this message
+  // Thermostat Setpoint Change Request - This message is called by the gateway sub-system to increase or decrease
+  // the cool and/or heat setpoint of a thermostat.
+  // Returns no specific response
+
+  required gwCmdId_t cmdId = 1 [default = DEV_THERMOSTAT_SETPOINT_CHANGE_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;    // Destination address
+  required gwThermostatSetpointMode_t mode = 3;
+  required int32 amount = 4;                    // amount of change, by increments of 0.1 degrees Celsius
+}
+
+//-----------------------------------------
+// Window Covering API set
+//-----------------------------------------
+
+// DEV_WINDOW_COVERING_ACTION_REQ
+
+message DevWindowCoveringActionReq
+{
+  // DEV_WINDOW_COVERING_ACTION_REQ - command ID used to identify this message
+  // Window Covering Action Request - This message is called by the gateway sub-system to change the 
+  // position/state of the window covering.
+  // Returns no specific response
+
+  required gwCmdId_t cmdId = 1 [default = DEV_WINDOW_COVERING_ACTION_REQ];  // don't change this field
+  required gwAddressStruct_t dstAddress = 2;    // Destination address
+  required gwWindowCoveringAction_t action = 3;
+  optional uint32 value = 4;                    // (uint16) Use when specifying action 0x04 or 0x07
+  optional uint32 percentage = 5;               // (uint8) Use when specifying action 0x05 or 0x08
+}
+
+

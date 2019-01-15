@@ -1,0 +1,4 @@
+server: 
+    port: 22000
+    servlet: 
+        context-path: /

@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "cloud/caas"
+		},
+		{
+			"path": "deploy"
+		},
+		{
+			"path": "display/web"
+		}
+	]
+}
