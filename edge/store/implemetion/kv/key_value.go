@@ -42,6 +42,7 @@ func (kv *KVStore) Get(key string) []byte {
 	opts := badger.DefaultOptions
 	opts.Dir = kv.Dir
 	opts.ValueDir = kv.Dir
+	// opts.ReadOnly = true
 	db, err := badger.Open(opts)
 	if err != nil {
 		log.Fatal(err)

@@ -8,7 +8,7 @@
 因为考虑到性能问题，初步计划采用Go(edge端，version1.10+)和java(cloud端，version1.8+)语言编写。
 
 [github源码地址](https://github.com/mythad/star-edge-cloud)
-QQ交流群：582945208
+QQ交流群：590749338
 
 ## 软件架构
 
@@ -207,7 +207,7 @@ java -jar caas*.jar
 cp -r */web */webapps/
 ```
 12. 访问及验证：
-[http://localhost:8080/web/index.html]http://localhost:8080/web/index.html
+[http://localhost:8080/web/index.html](http://localhost:8080/web/index.html)
 ![cloud](./images/cloud.png)
 > 注意：
 > 1.目前仅仅是演示版本，尚有很多很多功能没有完成，部分功能还有Bug，但这只是开始   
