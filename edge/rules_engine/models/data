@@ -1,0 +1,6 @@
+package models
+
+type Data struct {
+	Type        string
+	JSONContent string
+}

@@ -2,6 +2,7 @@ package extension
 
 import (
 	"fmt"
+	"star-edge-cloud/edge/core/share"
 	"star-edge-cloud/edge/utils/common"
 	"strings"
 )
@@ -13,7 +14,7 @@ type LogManager struct {
 // GetStatus -
 func (dm *LogManager) GetStatus() int {
 	path := `./`
-	result := common.ExecCheckStatus(path, "log", "status")
+	result := common.ExecCheckStatus(share.WorkingDir, path, "log", "status")
 
 	// Service (pid  ******) is running...
 	if strings.Contains(result, "running") {
@@ -39,7 +40,7 @@ func (dm *LogManager) Run() error {
 	if dm.GetStatus() <= 0 {
 		dm.Install()
 	}
-	str := common.ExecDeamonCommand(path, "log", "start")
+	str := common.ExecDeamonCommand(share.WorkingDir, path, "log", "start")
 	status := dm.GetStatus()
 	if status != 2 {
 		return fmt.Errorf("服务没有被运行:log,原因：%[1]s", str)
@@ -51,7 +52,7 @@ func (dm *LogManager) Run() error {
 // Stop -
 func (dm *LogManager) Stop() error {
 	path := `./`
-	str := common.ExecDeamonCommand(path, "log", "stop")
+	str := common.ExecDeamonCommand(share.WorkingDir, path, "log", "stop")
 	status := dm.GetStatus()
 	if status != 1 {
 		return fmt.Errorf("服务没有被运行:log,原因：%[1]s", str)
@@ -63,7 +64,7 @@ func (dm *LogManager) Stop() error {
 // Install -
 func (dm *LogManager) Install() error {
 	path := `./`
-	str := common.ExecDeamonCommand(path, "log", "install")
+	str := common.ExecDeamonCommand(share.WorkingDir, path, "log", "install")
 	status := dm.GetStatus()
 	if status != 2 {
 		return fmt.Errorf("服务没有被运行:log,原因：%[1]s", str)

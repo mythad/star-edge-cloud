@@ -36,14 +36,6 @@
 	<!-- JQVMap -->
 	<!-- <link href="./css/jqvmap.css" rel="stylesheet"> -->
 
-	<!-- Morris.js Charts Plugin -->
-	<!-- <link href="./css/morris.css" rel="stylesheet"> -->
-
-	<!-- Custom scroll bar css-->
-	<!-- <link href="./css/jquery.css" rel="stylesheet"> -->
-
-	<!---Font icons-->
-	<!-- <link href="./css/plugin.css" rel="stylesheet"> -->
 </head>
 
 <body>
@@ -91,85 +83,51 @@
 					 tabindex="0">
 						<div id="mCSB_1_container" class="mCSB_container" style="position:relative; top:0; left:0;" dir="ltr">
 							<div class="profile clearfix active">
-								<div class="profile_pic">
-									<img src="./images/25.jpg" alt=".." class="img-circle profile_img mCS_img_loaded">
-									<a href="#" class="profile-img">
-										<span class="fa fa-pencil" aria-hidden="true"></span>
-									</a>
-								</div>
 								<div class="profile_info">
 									<h2>星云边缘端管理</h2>
-									<!-- <span>Web Designer</span> -->
 								</div>
 							</div>
 							<ul class="list-unstyled components" id="accordion">
 								<li>
 									<a href="#homeSubmenu" class="accordion-toggle wave-effect waves-effect waves-button active" data-toggle="collapse"
 									 aria-expanded="true">
-										<i class="fa fa-television mr-2 sidebarsuccess"></i>综合
+										<i class="fa fa-television mr-2 sidebarsuccess"></i>综合信息
 									</a>
 									<ul class="collapse list-unstyled " id="homeSubmenu" data-parent="#accordion">
-
 										<li>
-											<a href="index.html">运行状态</a>
-										</li>
-									</ul>
-								</li>
-								<li>
-									<a href="#Submenu8" class="accordion-toggle wave-effect waves-effect waves-button active" data-toggle="collapse"
-									 aria-expanded="false">
-										<i class="fa fa-futbol-o mr-2 sidebarred"></i>设备
-									</a>
-									<ul class="collapse list-unstyled" id="Submenu8" data-parent="#accordion">
-										<li class="active">
-											<a href="device.html" class="active">设备列表</a>
-										</li>
-										<li>
-											<a href="adddevice.html">添加设备</a>
-										</li>
-										<li>
-											<a href="metadata.html">元数据管理</a>
+											<a href="index.html" class="active">运行状态</a>
+											<a href="log.html">日志</a>
 										</li>
 									</ul>
 								</li>
 								<li>
 									<a href="#Submenu9" class="accordion-toggle wave-effect waves-effect waves-button active" data-toggle="collapse"
 									 aria-expanded="false">
-										<i class="fa fa-futbol-o mr-2 sidebarred"></i>服务
+										<i class="fa fa-futbol-o mr-2 sidebarred"></i>信息管理
 									</a>
 									<ul class="collapse list-unstyled" id="Submenu9" data-parent="#accordion">
 										<li>
-											<a href="extension.html">**算法</a>
+											<a href="metadata.html">元数据管理</a>
 										</li>
 										<li>
-											<a href="store.html">存储服务</a>
-										</li>
-										<li>
-											<a href="#">调度服务</a>
-										</li>
-										<li>
-											<a href="#">规则引擎</a>
-										</li>
-										<li>
-											<a href="log.html">日志</a>
+											<a href="store.html">系统配置</a>
 										</li>
 									</ul>
 								</li>
 								<li>
 									<a href="#Submenu10" class="accordion-toggle wave-effect waves-effect waves-button active" data-toggle="collapse"
 									 aria-expanded="false">
-										<i class="fa fa-shopping-cart mr-2 sidebarsuccess"></i>其他
+										<i class="fa fa-shopping-cart mr-2 sidebarsuccess"></i>帮助
 									</a>
 									<ul class="collapse list-unstyled" id="Submenu10" data-parent="#accordion">
-
 										<li>
-											<a href="help.html">帮助</a>
+											<a href="help.html">使用帮助</a>
 										</li>
 										<li>
-											<a href="#">智能算法SDK</a>
+											<a href="algorithm.html">智能算法SDK</a>
 										</li>
 										<li>
-											<a href="#">设备驱动SDK</a>
+											<a href="protocol.html">物联网协议SDK</a>
 										</li>
 									</ul>
 								</li>
@@ -197,120 +155,106 @@
 							<!-- <li class="breadcrumb-item active" aria-current="page">Dashboard 01</li> -->
 						</ol>
 					</div>
-
-					<div class="row">
-						<div class="col-sm-12 col-lg-4">
-							<div class="card overflow-hidden">
-								<div class="card-header">
-									<h3 class="card-title">设备服务</h3>
-									<div class="card-options">
-										<a class="btn btn-sm btn-primary" href="#">查看</a>
-									</div>
-								</div>
-								<div class="card-body ">
-									<div id="pied" style="height:100%">1 / 6</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-12 col-lg-4">
-							<div class="card overflow-hidden">
-								<div class="card-header">
-									<h3 class="card-title">物理设备</h3>
-									<div class="card-options">
-										<a class="btn btn-sm btn-primary" href="#">查看</a>
-									</div>
-								</div>
-								<div class="card-body ">
-
-									<small class="h6">运行设备</small>
-									<div class="text-dark count mt-0 font-30">0 / 0</div>
-
-									<div class="progress progress-sm mt-0 mb-2">
-										<div class="progress-bar bg-success w-35" role="progressbar"></div>
-									</div>
-									<!-- <div class="">
-													<i class="fa fa-caret-up text-green"></i> 10% increases</div> -->
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-12 col-lg-4">
-							<div class="card overflow-hidden">
-								<div class="card-header">
-									<h3 class="card-title">算法服务</h3>
-									<div class="card-options">
-										<a class="btn btn-sm btn-primary" href="#">查看</a>
-									</div>
-								</div>
-								<div class="card-body ">
-									<div id="piee" style="height:100%">1 / 6</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-12 col-lg-4">
-							<div class="card overflow-hidden">
-								<div class="card-header">
-									<h3 class="card-title">存储服务</h3>
-									<div class="card-options">
-										<button id="handleStore" class="btn btn-sm btn-primary" onclick="handleStoreService()">启动</button>
-									</div>
-								</div>
-								<div class="card-body ">
-									<div id="storeStatus" style="height:100%">端口号：18000</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-12 col-lg-4">
-							<div class="card overflow-hidden">
-								<div class="card-header">
-									<h3 class="card-title">日志服务</h3>
-									<div class="card-options">
-										<button id="handleLog" class="btn btn-sm btn-primary" onclick="handleLogService()">启动</button>
-									</div>
-								</div>
-								<div class="card-body ">
-									<div id="logStatus" style="height:100%">端口号：17000</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-12 col-lg-4">
-							<div class="card overflow-hidden">
-								<div class="card-header">
-									<h3 class="card-title">调度服务</h3>
-									<div class="card-options">
-										<a class="btn btn-sm btn-primary" href="#">查看</a>
-									</div>
-								</div>
-								<div class="card-body ">
-									<!-- <div class="text-dark count mt-0 font-30" id="pie" style="height:400px">1 / 6</div> -->
-									<!-- <div id="pie" style="height:100%">1 / 6</div> -->
-								</div>
-							</div>
-						</div>
-					</div>
-
 					<div class="row">
 						<div class="col-lg-12">
 							<div class="card">
 								<div class="card-header">
-									<div class="card-title">日志</div>
-									<!-- <div class="card-options">
-									<a href="#" class="card-options-collapse" data-toggle="card-collapse">
-										<i class="fe fe-chevron-up"></i>
-									</a>
-									<a href="#" class="card-options-remove" data-toggle="card-remove">
-										<i class="fe fe-x"></i>
-									</a>
-								</div> -->
+									<div class="card-title">系统服务</div>
 								</div>
 								<div class="card-body">
-									<div class="table-responsive" id="log">
-
+									<div class="table-responsive">
+										<table class="table table-bordered border mb-0 align-items-center" id="tb_system_exts">
+											<thead>
+												<tr>
+													<th style="width: 160px;">服务名 </th>
+													<th style="width: 160px;">操作</th>
+												</tr>
+											</thead>
+											<tr v-for="svr in services">
+												<td style="width: 160px;">{{svr.Name}}</td>
+												<td style="width: 160px;">
+													<i title="运行/停止" :class="svr.Status<=1?'hand fa fa-play':'hand fa fa-pause'" aria-hidden="true" @click="handleSystemExt(svr.Status, svr.Type)"></i>
+													<!-- <i title="修改配置" class="hand fa fa-pencil-square-o" aria-hidden="true" @click="edit(svr.ID)"></i> -->
+												</td>
+											</tr>
+										</table>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="card">
+								<div class="card-header">
+									<div class="card-title">设备服务</div>
+									<div class="card-options">
+										<a class="btn btn-sm btn-primary" href="adddevice.html">添加设备</a>
+									</div>
+								</div>
+								<div class="card-body">
+									<div class="table-responsive">
+										<table class="table table-bordered border mb-0 align-items-center" id="tb_devices">
+											<thead>
+												<tr>
+													<th style="width: 160px;">设备id</th>
+													<th style="width: 160px;">设备名 </th>
+													<th style="width: 160px;">文件名</th>
+													<th style="width: 160px;">操作</th>
+												</tr>
+											</thead>
+											<tr v-for="svr in services">
+												<td style="width: 160px;">{{svr.ID}}</td>
+												<td style="width: 160px;">{{svr.Name}}</td>
+												<td style="width: 160px;">{{svr.FileName}}</td>
+												<td style="width: 160px;">
+													<i title="删除" class="hand fa fa-times fa-1x" aria-hidden="true" @click="removeDevice(svr.ID)"></i>&nbsp;&nbsp
+													<i title="运行/停止" :class="svr.Status<=1?'hand fa fa-play':'hand fa fa-pause'" aria-hidden="true" @click="handleDevice(svr)"></i>&nbsp;&nbsp
+													<i title="修改配置" class="hand fa fa-pencil-square-o" aria-hidden="true" @click="edit(svr.ID)"></i>
+												</td>
+											</tr>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="card">
+								<div class="card-header">
+									<div class="card-title">算法服务</div>
+									<div class="card-options">
+										<a class="btn btn-sm btn-primary" href="addextension.html">添加服务</a>
+									</div>
+								</div>
+								<div class="card-body">
+									<div class="table-responsive">
+										<table class="table table-bordered border mb-0 align-items-center" id="tb_exts">
+											<thead>
+												<tr>
+													<th style="width: 160px;">服务id</th>
+													<th style="width: 160px;">服务名 </th>
+													<th style="width: 160px;">文件名</th>
+													<th style="width: 160px;">操作</th>
+												</tr>
+											</thead>
+											<tr v-for="svr in services">
+												<td style="width: 160px;">{{svr.ID}}</td>
+												<td style="width: 160px;">{{svr.Name}}</td>
+												<td style="width: 160px;">{{svr.FileName}}</td>
+												<td style="width: 160px;">
+													<i title="删除" class="hand fa fa-times fa-1x" aria-hidden="true" @click="removeExt(svr.ID)"></i>&nbsp;&nbsp
+													<i title="运行/停止" :class="svr.Status<=1?'hand fa fa-play':'hand fa fa-pause'" aria-hidden="true" @click="handleExt(svr)"></i>&nbsp;&nbsp
+													<i title="修改配置" class="hand fa fa-pencil-square-o" aria-hidden="true" @click="edit(svr.ID)"></i>
+												</td>
+											</tr>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 
@@ -382,8 +326,12 @@
 		<!-- <script>
 		$('.count').countUp();
 	</script> -->
+		<script src="js/vue.js"></script>
+		<script src="js/vue-resource.js"></script>
 		<script src="js/index.js"></script>
-
+		<script>
+			init();
+		</script>
 		<!-- <div class="jqvmap-label" style="display: none;"></div> -->
 </body>
 

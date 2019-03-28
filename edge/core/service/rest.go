@@ -2,6 +2,7 @@ package service
 
 import (
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -11,6 +12,7 @@ import (
 	"star-edge-cloud/edge/core/config"
 	"star-edge-cloud/edge/core/device"
 	"star-edge-cloud/edge/core/extension"
+	"star-edge-cloud/edge/core/share"
 	"star-edge-cloud/edge/models"
 	"star-edge-cloud/edge/utils/common"
 	"strconv"
@@ -21,15 +23,38 @@ import (
 
 // CoreServer - 元数据服务
 type CoreServer struct {
-	DevManager   device.DeviceManager
-	ExtManager   extension.ExtentionManager
-	StoreManager extension.StoreManager
-	LogManager   extension.LogManager
-	Conf         *config.Config
+	DevManager         device.DeviceManager
+	ExtManager         extension.ExtentionManager
+	StoreManager       extension.StoreManager
+	LogManager         extension.LogManager
+	SchedulerManager   extension.SchedulerManager
+	RulesEngineManager extension.RulesEngineManager
+	Conf               *config.Config
+	exts               []models.Extension
 }
 
 // Start - 启动服务
 func (cs *CoreServer) Start() error {
+	if len(cs.exts) == 0 {
+		cs.exts = append(cs.exts, models.Extension{Name: "存储服务", Type: "store", FileName: "store"})
+		cs.exts = append(cs.exts, models.Extension{Name: "日志服务", Type: "log", FileName: "log"})
+		cs.exts = append(cs.exts, models.Extension{Name: "调度服务", Type: "scheduler", FileName: "scheduler"})
+		cs.exts = append(cs.exts, models.Extension{Name: "规则引擎", Type: "rule", FileName: "rules_engine"})
+	}
+	// 不要自动启动
+	// if err := cs.StoreManager.Run(); err == nil {
+	// 	cs.exts[0].Status = 2
+	// }
+	// if err := cs.LogManager.Run(); err == nil {
+	// 	cs.exts[1].Status = 2
+	// }
+	// if err := cs.SchedulerManager.Run(); err == nil {
+	// 	cs.exts[2].Status = 2
+	// }
+	// if err := cs.RulesEngineManager.Run(); err == nil {
+	// 	cs.exts[3].Status = 2
+	// }
+
 	mux := cs.makeMuxRouter()
 	// cs.Loghelper.Write(&models.LogInfo{ID: common.GetGUID(), Message: "Core服务启动，开始监听端口 :" + cs.Conf.Port, Level: 1, Time: time.Now()})
 	log.Println("服务启动，开始监听端口 :", cs.Conf.Port)
@@ -54,23 +79,35 @@ func (cs *CoreServer) makeMuxRouter() http.Handler {
 	muxRouter.HandleFunc("/{category:html|js|css|images}/{name:.*}", cs.handleStaticResource)
 	muxRouter.HandleFunc("/api/device/add", cs.handleAddDevice).Methods("POST")
 	muxRouter.HandleFunc("/api/device/remove", cs.handleRemoveDevice).Methods("POST")
-	muxRouter.HandleFunc("/api/device/run", cs.handleRunDevice).Methods("POST")
+	muxRouter.HandleFunc("/api/device/operate", cs.handleOperateDevice).Methods("POST")
 	muxRouter.HandleFunc("/api/device/all", cs.handleAllDevice).Methods("POST")
 	muxRouter.HandleFunc("/api/device/count", cs.handleCountDevice).Methods("POST")
-	muxRouter.HandleFunc("/api/device/stop", cs.handleStopDevice).Methods("POST")
+	// muxRouter.HandleFunc("/api/device/stop", cs.handleStopDevice).Methods("POST")
 	muxRouter.HandleFunc("/api/device/status", cs.handleGetDeviceStatus).Methods("POST")
 	muxRouter.HandleFunc("/api/extension/add", cs.handleAddExtension).Methods("POST")
 	muxRouter.HandleFunc("/api/extension/remove", cs.handleRemoveExtension).Methods("POST")
-	muxRouter.HandleFunc("/api/extension/run", cs.handleRunExtension).Methods("POST")
-	muxRouter.HandleFunc("/api/extension/stop", cs.handleStopExtension).Methods("POST")
+	muxRouter.HandleFunc("/api/extension/operate", cs.handleOperateExtension).Methods("POST")
+	// muxRouter.HandleFunc("/api/extension/stop", cs.handleStopExtension).Methods("POST")
 	muxRouter.HandleFunc("/api/extension/all", cs.handleAllExtension).Methods("POST")
 	muxRouter.HandleFunc("/api/extension/count", cs.handleCountExtension).Methods("POST")
+	muxRouter.HandleFunc("/api/system/all", cs.handleAllSystemExtension).Methods("POST")
+	muxRouter.HandleFunc("/api/system/operate", cs.handleOperateSystemExtension).Methods("POST")
 	muxRouter.HandleFunc("/api/store/run", cs.handleRunStore).Methods("POST")
 	muxRouter.HandleFunc("/api/store/stop", cs.handleStopStore).Methods("POST")
 	muxRouter.HandleFunc("/api/store/status", cs.handleStoreStatus).Methods("POST")
 	muxRouter.HandleFunc("/api/log/run", cs.handleRunLog).Methods("POST")
 	muxRouter.HandleFunc("/api/log/stop", cs.handleStopLog).Methods("POST")
 	muxRouter.HandleFunc("/api/log/status", cs.handleLogStatus).Methods("POST")
+	muxRouter.HandleFunc("/api/rulesengine/run", cs.handleRunRulesEngine).Methods("POST")
+	muxRouter.HandleFunc("/api/rulesengine/stop", cs.handleStopRulesEngine).Methods("POST")
+	muxRouter.HandleFunc("/api/rulesengine/status", cs.handleRulesEngineStatus).Methods("POST")
+	muxRouter.HandleFunc("/api/rulesengine/edit", cs.handleEditRules).Methods("POST")
+	muxRouter.HandleFunc("/api/scheduler/run", cs.handleRunScheduler).Methods("POST")
+	muxRouter.HandleFunc("/api/scheduler/stop", cs.handleStopScheduler).Methods("POST")
+	muxRouter.HandleFunc("/api/scheduler/status", cs.handleSchedulerStatus).Methods("POST")
+	muxRouter.HandleFunc("/api/scheduler/add", cs.handleAddSchedulerTask).Methods("POST")
+	muxRouter.HandleFunc("/api/scheduler/remove", cs.handleRemoveSchedulerTask).Methods("POST")
+	muxRouter.HandleFunc("/api/scheduler/list", cs.handleListSchedulerTask).Methods("POST")
 	muxRouter.HandleFunc("/api/help/content", cs.handleHelp).Methods("Get")
 	// muxRouter.HandleFunc("/api/{name:.*}", cs.handle)
 	return muxRouter
@@ -87,7 +124,7 @@ func (cs *CoreServer) handleStaticResource(w http.ResponseWriter, r *http.Reques
 func (cs *CoreServer) handleAddDevice(w http.ResponseWriter, r *http.Request) {
 	// 创建设备目录和设备运行文件
 	file, head, err := r.FormFile("file")
-	if err == nil {
+	if err != nil {
 		io.WriteString(w, "未上传文件")
 	}
 	defer file.Close()
@@ -128,21 +165,32 @@ func (cs *CoreServer) handleRemoveDevice(w http.ResponseWriter, r *http.Request)
 	}
 }
 
-func (cs *CoreServer) handleRunDevice(w http.ResponseWriter, r *http.Request) {
+func (cs *CoreServer) handleOperateDevice(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		log.Println("解析表单数据失败!")
 	}
 	id := r.Form.Get("id")
-	err = cs.DevManager.Run(id)
-	if err == nil {
-		io.WriteString(w, "running")
+	handle := r.Form.Get("handle")
+	if handle == "run" {
+		err = cs.DevManager.Run(id)
+		if err == nil {
+			io.WriteString(w, "running")
+		} else {
+			io.WriteString(w, err.Error())
+		}
 	} else {
-		io.WriteString(w, err.Error())
+		err = cs.DevManager.Stop(id)
+		if err == nil {
+			io.WriteString(w, "stopped")
+		} else {
+			io.WriteString(w, err.Error())
+		}
 	}
 }
 
 func (cs *CoreServer) handleAllDevice(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
 	devices, _ := cs.DevManager.QueryAllDevice()
 	// 更新状态
 	for index, item := range devices {
@@ -153,20 +201,6 @@ func (cs *CoreServer) handleAllDevice(w http.ResponseWriter, r *http.Request) {
 	}
 	data, _ := json.Marshal(devices)
 	io.WriteString(w, string(data[:]))
-}
-
-func (cs *CoreServer) handleStopDevice(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
-	if err != nil {
-		log.Println("解析表单数据失败!")
-	}
-	id := r.Form.Get("id")
-	err = cs.DevManager.Stop(id)
-	if err == nil {
-		io.WriteString(w, "stopped")
-	} else {
-		io.WriteString(w, err.Error())
-	}
 }
 
 func (cs *CoreServer) handleCountDevice(w http.ResponseWriter, r *http.Request) {
@@ -244,17 +278,27 @@ func (cs *CoreServer) handleRemoveExtension(w http.ResponseWriter, r *http.Reque
 	}
 }
 
-func (cs *CoreServer) handleRunExtension(w http.ResponseWriter, r *http.Request) {
+func (cs *CoreServer) handleOperateExtension(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		log.Println("解析表单数据失败!")
 	}
 	id := r.Form.Get("id")
-	err = cs.ExtManager.Run(id)
-	if err == nil {
-		io.WriteString(w, "running")
+	handle := r.Form.Get("handle")
+	if handle == "run" {
+		err = cs.ExtManager.Run(id)
+		if err == nil {
+			io.WriteString(w, "running")
+		} else {
+			io.WriteString(w, err.Error())
+		}
 	} else {
-		io.WriteString(w, err.Error())
+		err = cs.ExtManager.Stop(id)
+		if err == nil {
+			io.WriteString(w, "stopped")
+		} else {
+			io.WriteString(w, err.Error())
+		}
 	}
 }
 
@@ -273,7 +317,7 @@ func (cs *CoreServer) handleCountExtension(w http.ResponseWriter, r *http.Reques
 }
 
 func (cs *CoreServer) handleAllExtension(w http.ResponseWriter, r *http.Request) {
-	// w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
 	// err := r.ParseForm()
 	// if err != nil {
 	// 	log.Println("解析表单数据失败!")
@@ -290,6 +334,64 @@ func (cs *CoreServer) handleAllExtension(w http.ResponseWriter, r *http.Request)
 	data, _ := json.Marshal(exts)
 	io.WriteString(w, string(data[:]))
 
+}
+
+func (cs *CoreServer) handleAllSystemExtension(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
+	// 更新状态
+	for index, item := range cs.exts {
+		if status := common.ExecCheckStatus(share.WorkingDir, "./", item.FileName, "status"); common.StatusCovert(status) != item.Status {
+			cs.exts[index].Status = common.StatusCovert(status)
+			// cs.ExtManager.UpdateExtension(&cs.exts[index])
+		}
+	}
+	data, _ := json.Marshal(cs.exts)
+	io.WriteString(w, string(data[:]))
+
+}
+
+func (cs *CoreServer) handleOperateSystemExtension(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
+	err := r.ParseForm()
+	if err != nil {
+		log.Println("解析表单数据失败!")
+	}
+	_type := r.Form.Get("type")
+	handle := r.Form.Get("handle")
+	if handle == "run" {
+		switch _type {
+		case "store":
+			err = cs.StoreManager.Run()
+			cs.exts[0].Status = 2
+		case "log":
+			err = cs.LogManager.Run()
+			cs.exts[1].Status = 2
+		case "scheduler":
+			err = cs.SchedulerManager.Run()
+			cs.exts[2].Status = 2
+		case "rule":
+			err = cs.RulesEngineManager.Run()
+			cs.exts[3].Status = 2
+		}
+
+	} else {
+		switch _type {
+		case "store":
+			err = cs.StoreManager.Stop()
+			cs.exts[0].Status = 1
+		case "log":
+			err = cs.LogManager.Stop()
+			cs.exts[1].Status = 1
+		case "scheduler":
+			err = cs.SchedulerManager.Stop()
+			cs.exts[2].Status = 1
+		case "rule":
+			err = cs.RulesEngineManager.Stop()
+			cs.exts[3].Status = 1
+		}
+	}
+	data, _ := json.Marshal(cs.exts)
+	io.WriteString(w, string(data[:]))
 }
 
 func (cs *CoreServer) handleStopExtension(w http.ResponseWriter, r *http.Request) {
@@ -364,6 +466,137 @@ func (cs *CoreServer) handleLogStatus(w http.ResponseWriter, r *http.Request) {
 	default:
 		io.WriteString(w, "error")
 	}
+}
+
+func (cs *CoreServer) handleRunRulesEngine(w http.ResponseWriter, r *http.Request) {
+	err := cs.RulesEngineManager.Run()
+	if err == nil {
+		io.WriteString(w, "running")
+	} else {
+		io.WriteString(w, err.Error())
+	}
+}
+
+func (cs *CoreServer) handleStopRulesEngine(w http.ResponseWriter, r *http.Request) {
+	err := cs.RulesEngineManager.Stop()
+	if err == nil {
+		io.WriteString(w, "stopped")
+	} else {
+		io.WriteString(w, err.Error())
+	}
+}
+
+func (cs *CoreServer) handleRulesEngineStatus(w http.ResponseWriter, r *http.Request) {
+	status := cs.RulesEngineManager.GetStatus()
+	switch status {
+	case 1:
+		io.WriteString(w, "stopped")
+	case 2:
+		io.WriteString(w, "running")
+	default:
+		io.WriteString(w, "error")
+	}
+}
+
+func (cs *CoreServer) handleEditRules(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Println("解析表单数据失败!")
+	}
+	// name := r.Form.Get("rules_name")
+	conf := r.Form.Get("conf")
+	rules := &models.Rules{}
+	if err = xml.Unmarshal([]byte(conf), rules); err != nil {
+		io.WriteString(w, err.Error())
+		return
+	}
+
+	// client := &thttp.RestClient{}
+	// if _, err = client.PostRules(cs.Conf.RulesAddr+"rules", rules); err != nil {
+	// 	io.WriteString(w, err.Error())
+	// } else {
+	// 	io.WriteString(w, "success")
+	// }
+
+}
+
+func (cs *CoreServer) handleRunScheduler(w http.ResponseWriter, r *http.Request) {
+	err := cs.SchedulerManager.Run()
+	if err == nil {
+		io.WriteString(w, "running")
+	} else {
+		io.WriteString(w, err.Error())
+	}
+
+}
+
+func (cs *CoreServer) handleStopScheduler(w http.ResponseWriter, r *http.Request) {
+	err := cs.SchedulerManager.Stop()
+	if err == nil {
+		io.WriteString(w, "stopped")
+	} else {
+		io.WriteString(w, err.Error())
+	}
+}
+
+func (cs *CoreServer) handleSchedulerStatus(w http.ResponseWriter, r *http.Request) {
+	status := cs.SchedulerManager.GetStatus()
+	switch status {
+	case 1:
+		io.WriteString(w, "stopped")
+	case 2:
+		io.WriteString(w, "running")
+	default:
+		io.WriteString(w, "error")
+	}
+}
+
+func (cs *CoreServer) handleAddSchedulerTask(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Println("解析表单数据失败!")
+	}
+
+	// name := r.Form.Get("task_name")
+	// addr := r.Form.Get("task_addr")
+	// task := &models.SchedulerTask{Name: name, Address: addr}
+	// client := &thttp.RestClient{}
+	// if _, err = client.PostSchedulerTask(cs.Conf.SchedulerTaskAddr+"scheduler", task); err != nil {
+	// 	io.WriteString(w, err.Error())
+	// } else {
+	// 	io.WriteString(w, "success")
+	// }
+}
+
+func (cs *CoreServer) handleRemoveSchedulerTask(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Println("解析表单数据失败!")
+	}
+	// id := r.Form.Get("id")
+	// client := &thttp.RestClient{}
+	// if _, err = client.PostCommand(cs.Conf.SchedulerTaskAddr+"command",
+	// 	&models.Command{Type: "remove", Data: []byte(id)}); err != nil {
+	// 	io.WriteString(w, err.Error())
+	// } else {
+	// 	io.WriteString(w, "success")
+	// }
+}
+
+func (cs *CoreServer) handleListSchedulerTask(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Println("解析表单数据失败!")
+	}
+	// client := &thttp.RestClient{}
+	// if data, err := client.PostCommand(cs.Conf.SchedulerTaskAddr+"command",
+	// 	&models.Command{Type: "list"}); err != nil {
+	// 	io.WriteString(w, err.Error())
+	// } else {
+	// 	arr := []models.SchedulerTask{}
+	// 	json.Unmarshal(data.Message, &arr)
+	// 	io.WriteString(w, "success")
+	// }
 }
 
 func (cs *CoreServer) handleHelp(w http.ResponseWriter, r *http.Request) {

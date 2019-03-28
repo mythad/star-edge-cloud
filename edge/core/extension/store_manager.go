@@ -2,6 +2,7 @@ package extension
 
 import (
 	"fmt"
+	"star-edge-cloud/edge/core/share"
 	"star-edge-cloud/edge/utils/common"
 	"strings"
 )
@@ -13,7 +14,7 @@ type StoreManager struct {
 // GetStatus -
 func (dm *StoreManager) GetStatus() int {
 	path := `./`
-	result := common.ExecCheckStatus(path, "store", "status")
+	result := common.ExecCheckStatus(share.WorkingDir, path, "store", "status")
 
 	// Service (pid  ******) is running...
 	if strings.Contains(result, "running") {
@@ -39,7 +40,7 @@ func (dm *StoreManager) Run() error {
 	if dm.GetStatus() <= 0 {
 		dm.Install()
 	}
-	str := common.ExecDeamonCommand(path, "store", "start")
+	str := common.ExecDeamonCommand(share.WorkingDir, path, "store", "start")
 	status := dm.GetStatus()
 	if status != 2 {
 		return fmt.Errorf("服务没有被运行:store,原因：%[1]s", str)
@@ -51,7 +52,7 @@ func (dm *StoreManager) Run() error {
 // Stop -
 func (dm *StoreManager) Stop() error {
 	path := `./`
-	str := common.ExecDeamonCommand(path, "store", "stop")
+	str := common.ExecDeamonCommand(share.WorkingDir, path, "store", "stop")
 	status := dm.GetStatus()
 	if status != 1 {
 		return fmt.Errorf("服务没有被运行:store,原因：%[1]s", str)
@@ -63,7 +64,7 @@ func (dm *StoreManager) Stop() error {
 // Install -
 func (dm *StoreManager) Install() error {
 	path := `./`
-	str := common.ExecDeamonCommand(path, "store", "install")
+	str := common.ExecDeamonCommand(share.WorkingDir, path, "store", "install")
 	status := dm.GetStatus()
 	if status != 2 {
 		return fmt.Errorf("服务没有被运行:store,原因：%[1]s", str)

@@ -9,4 +9,5 @@ type Alarm struct {
 	Level       string
 	DeviceID    string
 	Data        []byte
+	Location    string
 }

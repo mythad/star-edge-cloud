@@ -2,9 +2,9 @@ package common
 
 import (
 	"bytes"
-	"log"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 // func ExecCommand(path string, exeFileName string) string {
@@ -53,10 +53,7 @@ import (
 // }
 
 // ExecDeamonCommand -
-func ExecDeamonCommand(path string, commandName string, params ...string) string {
-	dir := GetCurrentDirectory()
-	defer os.Chdir(dir)
-
+func ExecDeamonCommand(workingdir string, path string, commandName string, params ...string) string {
 	os.Chdir(path)
 	os.Chmod(commandName, os.ModePerm)
 	cmd := exec.Command("./"+commandName, params...)
@@ -64,17 +61,16 @@ func ExecDeamonCommand(path string, commandName string, params ...string) string
 	cmd.Stdout = &out
 	err := cmd.Run()
 	if err != nil {
-		log.Println(err.Error())
+		// os.Chdir(workingdir)
+		// log.Println(err.Error())
 	}
-
-	return out.String()
+	str := out.String()
+	os.Chdir(workingdir)
+	return str
 }
 
 // ExecCheckStatus -
-func ExecCheckStatus(path string, commandName string, params ...string) string {
-	dir := GetCurrentDirectory()
-	defer os.Chdir(dir)
-
+func ExecCheckStatus(workingdir string, path string, commandName string, params ...string) string {
 	os.Chdir(path)
 	os.Chmod(commandName, os.ModePerm)
 	cmd := exec.Command("./"+commandName, params...)
@@ -82,8 +78,29 @@ func ExecCheckStatus(path string, commandName string, params ...string) string {
 	cmd.Stdout = &out
 	err := cmd.Run()
 	if err != nil {
-		log.Println(err.Error())
+		// os.Chdir(workingdir)
+		// log.Println(err.Error())
+	}
+	str := out.String()
+	os.Chdir(workingdir)
+	return str
+}
+
+// StatusCovert -
+func StatusCovert(str string) int {
+	if strings.Contains(str, "running") {
+		return 2
 	}
 
-	return out.String()
+	// Service is stopped
+	if strings.Contains(str, "stopped") {
+		return 1
+	}
+
+	// Service is not installed
+	if strings.Contains(str, "installed") {
+		return 0
+	}
+
+	return -1
 }

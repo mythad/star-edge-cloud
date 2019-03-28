@@ -1,18 +1,21 @@
 package main
 
 import (
-	"database/sql"
-	"fmt"
 	"log"
 	"os"
 	"star-edge-cloud/edge/core/config"
 	"star-edge-cloud/edge/core/device"
 	"star-edge-cloud/edge/core/service"
+	"star-edge-cloud/edge/core/share"
+	"star-edge-cloud/edge/utils/common"
 
 	"github.com/joho/godotenv"
 )
 
 var conf config.Config
+
+const sql1 = `create table device (id string not null primary key, name text,file_name string, describe string, registry_time string, type string, other string, protocol string, conf string, status integer,liseners string, command_server_address string, log_base_url string);`
+const sql2 = `create table extension (id string not null primary key, name text,file_name string, describe string, registry_time string, type string, other string, protocol string, conf string, status integer,liseners string, command_server_address string, log_base_url string);`
 
 func main() {
 	log.Println("启动元数据服务程序...")
@@ -23,19 +26,21 @@ func main() {
 	conf.MetadataDBPath = os.Getenv("Core.MetadataDBPath")
 	conf.LogDBPath = os.Getenv("Core.LogDBPath")
 	conf.Port = os.Getenv("Core.Port")
+	conf.RulesAddr = os.Getenv("Rules.Address")
+	conf.SchedulerTaskAddr = os.Getenv("SchedulerTask.Addr")
 
 	// 初始化元数据库
-	if _, err := os.Stat(conf.MetadataDBPath); err != nil {
-		initMetadataDB()
-	}
-	conf.MetadataDBPath = fmt.Sprintf("file:%s?cache=shared", conf.MetadataDBPath)
+	share.InitializeDB(conf.MetadataDBPath)
+	share.CreateTable(sql1)
+	share.CreateTable(sql2)
+	share.WorkingDir = common.GetCurrentDirectory()
 
 	server := &service.CoreServer{}
 	server.Conf = &conf
 	server.DevManager.Conf = &conf
 	server.ExtManager.Conf = &conf
 
-	loadDevice(&server.DevManager)
+	// loadDevice(&server.DevManager)
 
 	go func() {
 		if err := server.Start(); err != nil {
@@ -44,32 +49,6 @@ func main() {
 	}()
 
 	select {}
-}
-
-// initMetadataDB - 初始化元数据库
-func initMetadataDB() {
-	sqlStmt1 := `
-	create table device (id string not null primary key, name text,file_name string, describe string, registry_time string, type string, other string, protocol string, conf string, status integer,liseners string, command_server_address string, log_base_url string);
-	`
-
-	sqlStmt3 := `
-	create table extension (id string not null primary key, name text,file_name string, describe string, registry_time string, type string, other string, protocol string, conf string, status integer,liseners string, command_server_address string, log_base_url string);
-	delete from extension;
-	`
-
-	db1, err := sql.Open("sqlite3", conf.MetadataDBPath)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db1.Close()
-
-	if _, err = db1.Exec(sqlStmt1); err != nil {
-		log.Printf("%q: %s\n", err, sqlStmt1)
-	}
-
-	if _, err = db1.Exec(sqlStmt3); err != nil {
-		log.Printf("%q: %s\n", err, sqlStmt3)
-	}
 }
 
 func loadDevice(manager *device.DeviceManager) {

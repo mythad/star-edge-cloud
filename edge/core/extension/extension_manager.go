@@ -10,6 +10,7 @@ import (
 	"mime/multipart"
 	"os"
 	"star-edge-cloud/edge/core/config"
+	"star-edge-cloud/edge/core/share"
 	"star-edge-cloud/edge/models"
 	"star-edge-cloud/edge/utils/common"
 	"strconv"
@@ -39,7 +40,7 @@ func (dm *ExtentionManager) AddExtension(file multipart.File, ext *models.Extens
 	ioutil.WriteFile(jsonpath, content, 0644)
 	// 安装daemon
 	cmdpath := fmt.Sprintf("./plugins/extension/%[1]s/", ext.ID)
-	str := common.ExecDeamonCommand(cmdpath, ext.FileName, "install")
+	str := common.ExecDeamonCommand(share.WorkingDir, cmdpath, ext.FileName, "install")
 	status := dm.GetStatus(ext)
 	if status == -1 {
 		return fmt.Errorf("服务没有被安装:%[1]s,原因：%[2]s", ext.ID, str)
@@ -49,12 +50,7 @@ func (dm *ExtentionManager) AddExtension(file multipart.File, ext *models.Extens
 	INSERT INTO extension (id, name, file_name,describe,registry_time,type,other,protocol,conf,status,liseners,command_server_address,log_base_url)
 	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 	`
-	db, err := sql.Open("sqlite3", dm.Conf.MetadataDBPath)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-	if _, err = db.Exec(sqlStmt1,
+	if _, err := share.SqliteDB.Exec(sqlStmt1,
 		ext.ID,
 		ext.Name,
 		ext.FileName,
@@ -81,7 +77,7 @@ func (dm *ExtentionManager) RemoveExtension(ID string) error {
 
 	// remove service
 	cmdpath := fmt.Sprintf(`./plugins/extension/%s/`, ID)
-	str := common.ExecDeamonCommand(cmdpath, ext.FileName, "remove")
+	str := common.ExecDeamonCommand(share.WorkingDir, cmdpath, ext.FileName, "remove")
 	status := dm.GetStatus(ext)
 	if status == -1 {
 		return fmt.Errorf("服务没有被删除:%[1]s,状态：%[2]s,原因：%[3]s", ext.ID, strconv.Itoa(status), str)
@@ -94,12 +90,7 @@ func (dm *ExtentionManager) RemoveExtension(ID string) error {
 	sqlStmt1 := `
 	DELETE FROM extension WHERE id=?;
 	`
-	db, err := sql.Open("sqlite3", dm.Conf.MetadataDBPath)
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-	if _, err := db.Exec(sqlStmt1, ID); err != nil {
+	if _, err := share.SqliteDB.Exec(sqlStmt1, ID); err != nil {
 		return err
 	}
 	return nil
@@ -112,13 +103,7 @@ func (dm *ExtentionManager) UpdateExtension(ext *models.Extension) error {
 	SET name = ?, file_name = ?,describe=?,registry_time=?,type=?,other=?,protocol=?,conf=?,status=?,liseners=?,command_server_address=?,log_base_url=?
 	WHERE id=?;
 	`
-	db, err := sql.Open("sqlite3", dm.Conf.MetadataDBPath)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	if _, err = db.Exec(sqlStmt1,
+	if _, err := share.SqliteDB.Exec(sqlStmt1,
 		ext.Name,
 		ext.FileName,
 		ext.Describe,
@@ -144,14 +129,8 @@ func (dm *ExtentionManager) GetExtension(ID string) (*models.Extension, error) {
 	FROM extension
 	WHERE id=?
 	`
-	db, err := sql.Open("sqlite3", dm.Conf.MetadataDBPath)
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
 	ext := &models.Extension{}
-	if rows, err := db.Query(sqlStmt1, ID); err == nil {
+	if rows, err := share.SqliteDB.Query(sqlStmt1, ID); err == nil {
 		if rows.Next() {
 			rows.Scan(&ext.ID,
 				&ext.Name,
@@ -181,15 +160,9 @@ func (dm *ExtentionManager) QueryAllExtension(etype string) (exts []models.Exten
 	SELECT id, name, file_name,describe,registry_time,type,other,protocol,conf,status,liseners,command_server_address,log_base_url
 	FROM extension where type=?
 	`
-	db, err := sql.Open("sqlite3", dm.Conf.MetadataDBPath)
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
 	var rows *sql.Rows
 	// defer rows.Close()
-	if rows, err = db.Query(sqlStmt1, etype); err == nil {
+	if rows, err = share.SqliteDB.Query(sqlStmt1, etype); err == nil {
 		for rows.Next() {
 			ext := models.Extension{}
 			rows.Scan(&ext.ID,
@@ -216,7 +189,7 @@ func (dm *ExtentionManager) QueryAllExtension(etype string) (exts []models.Exten
 // GetStatus -
 func (dm *ExtentionManager) GetStatus(ext *models.Extension) int {
 	path := fmt.Sprintf(`./plugins/extension/%s`, ext.ID)
-	result := common.ExecCheckStatus(path, ext.FileName, "status")
+	result := common.ExecCheckStatus(share.WorkingDir, path, ext.FileName, "status")
 	// log.Println(path)
 	// Service (pid  ******) is running...
 	if strings.Contains(result, "running") {
@@ -241,7 +214,7 @@ func (dm *ExtentionManager) Run(id string) error {
 	ext, _ := dm.GetExtension(id)
 
 	path := fmt.Sprintf(`./plugins/extension/%s`, ext.ID)
-	str := common.ExecDeamonCommand(path, ext.FileName, "start")
+	str := common.ExecDeamonCommand(share.WorkingDir, path, ext.FileName, "start")
 	status := dm.GetStatus(ext)
 	if status != 2 {
 		return fmt.Errorf("服务没有被运行:%[1]s,原因：%[2]s", ext.ID, str)
@@ -254,7 +227,7 @@ func (dm *ExtentionManager) Run(id string) error {
 func (dm *ExtentionManager) Stop(id string) error {
 	ext, _ := dm.GetExtension(id)
 	path := fmt.Sprintf(`./plugins/extension/%s`, ext.ID)
-	str := common.ExecDeamonCommand(path, ext.FileName, "stop")
+	str := common.ExecDeamonCommand(share.WorkingDir, path, ext.FileName, "stop")
 	status := dm.GetStatus(ext)
 	if status != 1 {
 		return fmt.Errorf("服务没有被运行:%[1]s,原因：%[2]s", ext.ID, str)

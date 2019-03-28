@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Rules>
+	<Version>0.1</Version>
+	<State>true</State>
+	<Rule name="home1">
+		<Yql>name='deen' and age>=23 and (hobby in ('soccer', 'swim') or score>90))</Yql>
+		<PostAddr>http://127.0.0.1:28000/alarm/1</PostAddr>
+	</Rule>
+	<Rule name="home2">
+		<Yql>name='deen' and age<23 and (hobby in ('soccer', 'swim') or score>90))</Yql>
+		<PostAddr>http://127.0.0.1:28000/alarm/2</PostAddr>
+	</Rule>
+	<Rule name="work">
+		<Yql>score ∩ (7,1,9,5,3)</Yql>
+		<PostAddr>http://127.0.0.1:28000/state</PostAddr>
+	</Rule>
+	<!--
+		<Group>
+			<Value>Friends</Value>
+			<Value>Squash</Value>
+		</Group>
+    -->
+</Rules>

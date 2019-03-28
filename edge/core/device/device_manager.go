@@ -10,6 +10,7 @@ import (
 	"mime/multipart"
 	"os"
 	"star-edge-cloud/edge/core/config"
+	"star-edge-cloud/edge/core/share"
 	"star-edge-cloud/edge/models"
 	"star-edge-cloud/edge/utils/common"
 	"strconv"
@@ -40,10 +41,11 @@ func (dm *DeviceManager) AddDevice(file multipart.File, dev *models.Device) erro
 	ioutil.WriteFile(jsonpath, content, 0644)
 	// 安装daemon
 	cmdpath := fmt.Sprintf("./plugins/device/%[1]s/", dev.ID)
-	str := common.ExecDeamonCommand(cmdpath, dev.FileName, "install")
+	common.ExecDeamonCommand(share.WorkingDir, cmdpath, dev.FileName, "install")
+	// str := common.ExecDeamonCommand(cmdpath, dev.FileName, "install")
 	status := dm.GetStatus(dev)
 	if status == -1 {
-		return fmt.Errorf("服务没有被安装:%[1]s,原因：%[2]s", dev.ID, str)
+		// return fmt.Errorf("服务没有被安装:%[1]s,原因：%[2]s", dev.ID, "请使用root账号安装。")
 	}
 
 	// 信息入库
@@ -51,13 +53,7 @@ func (dm *DeviceManager) AddDevice(file multipart.File, dev *models.Device) erro
 	INSERT INTO device (id, name, file_name,describe,registry_time,type,other,protocol,conf,status,liseners,command_server_address,log_base_url)
 	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 	`
-	db, err := sql.Open("sqlite3", dm.Conf.MetadataDBPath)
-	if err != nil {
-		log.Fatal(err)
-		return err
-	}
-	defer db.Close()
-	if _, err = db.Exec(sqlStmt1,
+	if _, err := share.SqliteDB.Exec(sqlStmt1,
 		dev.ID,
 		dev.Name,
 		dev.FileName,
@@ -85,7 +81,7 @@ func (dm *DeviceManager) RemoveDevice(deviceID string) error {
 
 	// remove service
 	cmdpath := fmt.Sprintf(`./plugins/device/%s/`, deviceID)
-	str := common.ExecDeamonCommand(cmdpath, dev.FileName, "remove")
+	str := common.ExecDeamonCommand(share.WorkingDir, cmdpath, dev.FileName, "remove")
 	// log.Println(cmdpath + dev.FileName)
 	status := dm.GetStatus(dev)
 	if status == -1 {
@@ -100,12 +96,7 @@ func (dm *DeviceManager) RemoveDevice(deviceID string) error {
 	sqlStmt1 := `
 	DELETE FROM device WHERE id=?;
 	`
-	db, err := sql.Open("sqlite3", dm.Conf.MetadataDBPath)
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-	if _, err = db.Exec(sqlStmt1, deviceID); err != nil {
+	if _, err = share.SqliteDB.Exec(sqlStmt1, deviceID); err != nil {
 		return err
 	}
 	return nil
@@ -118,13 +109,7 @@ func (dm *DeviceManager) UpdateDevice(device *models.Device) error {
 	SET name = ?, file_name = ?,describe=?,registry_time=?,type=?,other=?,protocol=?,conf=?,status=?,liseners=?, command_server_address=?, log_base_url=?
 	WHERE id=?;
 	`
-	db, err := sql.Open("sqlite3", dm.Conf.MetadataDBPath)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	if _, err = db.Exec(sqlStmt1,
+	if _, err := share.SqliteDB.Exec(sqlStmt1,
 		device.Name,
 		device.FileName,
 		device.Describe,
@@ -151,14 +136,8 @@ func (dm *DeviceManager) GetDevice(ID string) (*models.Device, error) {
 	FROM device
 	WHERE id=?
 	`
-	db, err := sql.Open("sqlite3", dm.Conf.MetadataDBPath)
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
 	dev := &models.Device{}
-	if rows, err := db.Query(sqlStmt1, ID); err == nil {
+	if rows, err := share.SqliteDB.Query(sqlStmt1, ID); err == nil {
 		if rows.Next() {
 			rows.Scan(&dev.ID,
 				&dev.Name,
@@ -188,15 +167,9 @@ func (dm *DeviceManager) QueryAllDevice() (devices []models.Device, err error) {
 	SELECT *
 	FROM device
 	`
-	db, err := sql.Open("sqlite3", dm.Conf.MetadataDBPath)
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
 	var rows *sql.Rows
 	// defer rows.Close()
-	if rows, err = db.Query(sqlStmt1); err == nil {
+	if rows, err = share.SqliteDB.Query(sqlStmt1); err == nil {
 		for rows.Next() {
 			dev := models.Device{}
 			rows.Scan(&dev.ID,
@@ -222,7 +195,7 @@ func (dm *DeviceManager) QueryAllDevice() (devices []models.Device, err error) {
 // GetStatus -
 func (dm *DeviceManager) GetStatus(dev *models.Device) int {
 	path := fmt.Sprintf(`./plugins/device/%s`, dev.ID)
-	result := common.ExecCheckStatus(path, dev.FileName, "status")
+	result := common.ExecCheckStatus(share.WorkingDir, path, dev.FileName, "status")
 
 	// Service (pid  ******) is running...
 	if strings.Contains(result, "running") {
@@ -247,7 +220,7 @@ func (dm *DeviceManager) Run(id string) error {
 	dev, _ := dm.GetDevice(id)
 
 	path := fmt.Sprintf(`./plugins/device/%s`, dev.ID)
-	str := common.ExecDeamonCommand(path, dev.FileName, "start")
+	str := common.ExecDeamonCommand(share.WorkingDir, path, dev.FileName, "start")
 	status := dm.GetStatus(dev)
 	if status != 2 {
 		return fmt.Errorf("服务没有被运行:%[1]s,原因：%[2]s", dev.ID, str)
@@ -262,7 +235,7 @@ func (dm *DeviceManager) Run(id string) error {
 func (dm *DeviceManager) Stop(id string) error {
 	dev, _ := dm.GetDevice(id)
 	path := fmt.Sprintf(`./plugins/device/%s`, dev.ID)
-	str := common.ExecDeamonCommand(path, dev.FileName, "stop")
+	str := common.ExecDeamonCommand(share.WorkingDir, path, dev.FileName, "stop")
 	status := dm.GetStatus(dev)
 	if status != 1 {
 		return fmt.Errorf("服务没有被运行:%[1]s,原因：%[2]s", dev.ID, str)

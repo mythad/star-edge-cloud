@@ -22,6 +22,16 @@ go build main.go
 mv main ../../deploy/edge/log
 cp ./conf/log_conf.env ../../deploy/edge/conf/
 
+cd ../rules_engine/
+go build main.go
+mv main ../../deploy/edge/rules_engine
+cp ./conf/rules_engine_conf.env ../../deploy/edge/conf/
+
+cd ../scheduler/
+go build main.go
+mv main ../../deploy/edge/scheduler
+cp ./conf/scheduler_conf.env ../../deploy/edge/conf/
+
 cd ../device/
 go build main.go
 mv main ../../deploy/edge/compile/device

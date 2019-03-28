@@ -1,0 +1,27 @@
+package demo
+
+import (
+	"star-edge-cloud/edge/transport/coding"
+)
+
+// CommandHandler 接收到数据，调用回调方法
+type CommandHandler struct {
+	decoder coding.IDecoder
+	encoder coding.IEncoder
+}
+
+// SetDecoder -
+func (it *CommandHandler) SetDecoder(de coding.IDecoder) {
+	it.decoder = de
+}
+
+// SetEncoder -
+func (it *CommandHandler) SetEncoder(en coding.IEncoder) {
+	it.encoder = en
+}
+
+// Handle -
+func (it *CommandHandler) Handle(data []byte) ([]byte, error) {
+
+	return nil, nil
+}

@@ -6,6 +6,6 @@ type Fault struct {
 	Type    string
 	Message string
 	Reason  string
-	Time    string
+	Time    int64
 	Data    []byte
 }
